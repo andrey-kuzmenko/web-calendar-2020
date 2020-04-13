@@ -8,7 +8,7 @@ import {Observable} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationMiddlewareService implements OnInit{
+export class NotificationMiddlewareService{
 
   public pushNotificationStatus = {
     isSubscribed: false,
@@ -20,12 +20,15 @@ export class NotificationMiddlewareService implements OnInit{
 
   constructor(
     private http: HttpClient,
-    private authenticationService: AuthenticationService) { }
-
-  ngOnInit(): void {
+    private authenticationService: AuthenticationService) {
     this.isSubscribed()
       .subscribe(isSubscribed => {
         this.pushNotificationStatus.isSubscribed = isSubscribed;
+
+        if(this.pushNotificationStatus.isSubscribed) {
+          this.subscribeUser();
+          localStorage.setItem("isPushSubscribeInit", JSON.stringify(true));
+        }
       });
   }
 
@@ -34,9 +37,8 @@ export class NotificationMiddlewareService implements OnInit{
     return this.http.get<boolean>(`${environment.apiUrl}/notification/isSubscribed/${currentUser.id}`);
   }
 
-  isSubscribeInit(): Observable<boolean> {
-    const currentUser = this.authenticationService.currentUserValue;
-    return this.http.get<boolean>(`${environment.apiUrl}/notification/isSubscribeInit/${currentUser.id}`);
+  isSubscribeInit(): boolean {
+    return JSON.parse(localStorage.getItem("isPushSubscribeInit"));
   }
 
   init() {
@@ -64,7 +66,7 @@ export class NotificationMiddlewareService implements OnInit{
   }
 
 
-  pushSubscription(subscription: Subscription){
+  pushSubscribe(subscription: Subscription){
     console.log(subscription);
     const currentUser = this.authenticationService.currentUserValue;
     this.http.post<Subscription>(`${environment.apiUrl}/notification/subscribe/${currentUser.id}`, subscription)
@@ -111,7 +113,7 @@ export class NotificationMiddlewareService implements OnInit{
           p256dh: sub.keys.p256dh
         };
 
-        this.pushSubscription(pushSub);
+        this.pushSubscribe(pushSub);
 
         this.pushNotificationStatus.isSubscribed = true;
       })

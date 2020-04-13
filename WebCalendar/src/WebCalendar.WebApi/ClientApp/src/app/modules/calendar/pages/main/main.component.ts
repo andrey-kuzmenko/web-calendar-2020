@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NotificationMiddlewareService} from "../../../../core/service/notification-middleware.service";
 
 @Component({
@@ -8,15 +8,12 @@ import {NotificationMiddlewareService} from "../../../../core/service/notificati
 })
 export class MainComponent implements OnInit {
 
-  constructor(private notificationMiddleware: NotificationMiddlewareService) { }
-
-  ngOnInit(): void {
-    this.notificationMiddleware.isSubscribeInit()
-      .subscribe(isInit => {
-        if(!isInit){
-          this.notificationMiddleware.toggleSubscription();
-        }
-      });
+  constructor(private notificationMiddleware: NotificationMiddlewareService) {
   }
 
+  ngOnInit(): void {
+    if (!this.notificationMiddleware.isSubscribeInit()) {
+      this.notificationMiddleware.toggleSubscription();
+    }
+  }
 }

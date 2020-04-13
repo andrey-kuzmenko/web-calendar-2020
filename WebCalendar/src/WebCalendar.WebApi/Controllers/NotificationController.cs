@@ -75,21 +75,6 @@ namespace WebCalendar.WebApi.Controllers
 
             return Ok(isSubscribed);
         }
-        
-        [HttpGet("isSubscribeInit/{userId}")]
-        public async Task<ActionResult<bool>> IsSubscribeInit(string userId)
-        {
-            UserServiceModel user = await _userService.GetByPrincipalAsync(User);
-
-            if (user.Id.ToString() != userId)
-            {
-                return Unauthorized();
-            }
-
-            bool isSubscribeInit = await _pushNotificationService.IsSubscribeInitAsync(user.Id);
-
-            return Ok(isSubscribeInit);
-        }
 
         [HttpPost("test/{userId}")]
         [AllowAnonymous]

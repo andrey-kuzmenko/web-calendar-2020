@@ -82,13 +82,5 @@ namespace WebCalendar.Services.PushNotification.Implementation
 
             return isSubscribed;
         }
-
-        public async Task<bool> IsSubscribeInitAsync(Guid userId)
-        {
-            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
-
-            return (user.IsSubscribedToPushNotifications && user.PushSubscriptionId != null)
-                || !user.IsSubscribedToPushNotifications;
-        }
     }
 }
