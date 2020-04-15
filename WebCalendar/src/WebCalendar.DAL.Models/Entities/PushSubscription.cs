@@ -9,6 +9,8 @@ namespace WebCalendar.DAL.Models.Entities
         public string Endpoint { get; set; }
         public string P256DH { get; set; }
         public string Auth { get; set; }
+        
+        public Guid UserId { get; set; }
         public User User { get; set; }
 
         public DateTime AddedDate { get; set; }

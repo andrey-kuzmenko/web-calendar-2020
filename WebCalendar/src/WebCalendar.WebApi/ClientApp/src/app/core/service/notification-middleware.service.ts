@@ -21,7 +21,7 @@ export class NotificationMiddlewareService{
   constructor(
     private http: HttpClient,
     private authenticationService: AuthenticationService) {
-    this.isSubscribed()
+    /*this.isSubscribed()
       .subscribe(isSubscribed => {
         this.pushNotificationStatus.isSubscribed = isSubscribed;
 
@@ -29,16 +29,11 @@ export class NotificationMiddlewareService{
           this.subscribeUser();
           localStorage.setItem("isPushSubscribeInit", JSON.stringify(true));
         }
-      });
-  }
-
-  isSubscribed(): Observable<boolean> {
-    const currentUser = this.authenticationService.currentUserValue;
-    return this.http.get<boolean>(`${environment.apiUrl}/notification/isSubscribed/${currentUser.id}`);
+      });*/
   }
 
   isSubscribeInit(): boolean {
-    return JSON.parse(localStorage.getItem("isPushSubscribeInit"));
+    return localStorage.getItem("pushId") != null;
   }
 
   init() {
@@ -70,12 +65,15 @@ export class NotificationMiddlewareService{
     console.log(subscription);
     const currentUser = this.authenticationService.currentUserValue;
     this.http.post<Subscription>(`${environment.apiUrl}/notification/subscribe/${currentUser.id}`, subscription)
-      .subscribe();
+      .subscribe(pushId => {
+        localStorage.setItem("pushId", JSON.stringify(pushId));
+      });
   }
 
   pushUnsubscribe(){
     const currentUser = this.authenticationService.currentUserValue;
-    this.http.delete(`${environment.apiUrl}/notification/unsubscribe/${currentUser.id}`)
+    const pushId = JSON.parse(localStorage.getItem("pushId"));
+    this.http.delete(`${environment.apiUrl}/notification/unsubscribe/${currentUser.id}/${pushId}`)
       .subscribe();
   }
 

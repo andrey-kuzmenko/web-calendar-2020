@@ -23,9 +23,7 @@ namespace WebCalendar.DAL.Models.Entities
         public ICollection<Calendar> Calendars { get; set; }
         public ICollection<UserEvent> UserEvents { get; set; }
 
-        public Guid? PushSubscriptionId { get; set; }
-        public PushSubscription PushSubscription { get; set; }
-        public bool IsSubscribedToPushNotifications { get; set; } = true;
+        public ICollection<PushSubscription> PushSubscriptions { get; set; }
 
         public DateTime AddedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

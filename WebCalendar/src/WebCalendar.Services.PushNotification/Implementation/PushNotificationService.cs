@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
-using WebCalendar.DAL.Models.Entities;
-using WebCalendar.Services.Contracts;
 using WebCalendar.Services.PushNotification.Contracts;
 using WebCalendar.Services.PushNotification.Models;
 using WebPush;
@@ -33,54 +30,42 @@ namespace WebCalendar.Services.PushNotification.Implementation
 
         public async Task SendNotificationAsync(NotificationServiceModel notificationService, Guid userId)
         {
-            PushSubscription userPushSubscription = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
-                selector: u => u.PushSubscription,
-                predicate: u => u.Id == userId);
+            IEnumerable<PushSubscription> repositoryPushSubscriptions = await _uow.GetRepository<PushSubscription>()
+                .GetAllAsync(p => p.UserId == userId);
 
-            WebPush.PushSubscription pushSubscription = _mapper
-                .Map<PushSubscription, WebPush.PushSubscription>(userPushSubscription);
+            IEnumerable<WebPush.PushSubscription> pushSubscriptions = _mapper
+                .Map<IEnumerable<PushSubscription>, IEnumerable<WebPush.PushSubscription>>(repositoryPushSubscriptions);
 
             string serializedNotification = JsonConvert.SerializeObject(notificationService);
 
-            await _webPushClient.SendNotificationAsync(pushSubscription, serializedNotification);
+            foreach (WebPush.PushSubscription pushSubscription in pushSubscriptions)
+            {
+                await _webPushClient.SendNotificationAsync(pushSubscription, serializedNotification);
+            }
         }
 
-        public async Task SubscribeOnPushNotificationAsync(Guid userId, PushSubscriptionServiceModel pushSubscriptionServiceModel)
+        public async Task<Guid> SubscribeOnPushNotificationAsync(Guid userId, PushSubscriptionServiceModel pushSubscriptionServiceModel)
         {
-            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
+            PushSubscription pushSubscription = _mapper
+                .Map<PushSubscriptionServiceModel, PushSubscription>(pushSubscriptionServiceModel);
 
-            PushSubscription pushSubscription = _mapper.Map<PushSubscriptionServiceModel, PushSubscription>(pushSubscriptionServiceModel);
+            pushSubscription.UserId = userId;
 
-            user.PushSubscription = pushSubscription;
-            user.IsSubscribedToPushNotifications = true;
+            await _uow.GetRepository<PushSubscription>().AddAsync(pushSubscription);
 
-            _uow.GetRepository<User>().Update(user);
             await _uow.SaveChangesAsync();
+
+            return pushSubscription.Id;
         }
 
-        public async Task UnsubscribeFromPushNotificationAsync(Guid userId)
+        public async Task UnsubscribeFromPushNotificationAsync(Guid pushId)
         {
-            User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
-                predicate: u => u.Id == userId,
-                include: query => 
-                    query.Include(u => u.PushSubscription),
-                disableTracking: false);
+            _uow.GetRepository<PushSubscription>().Remove(new PushSubscription
+            {
+                Id = pushId
+            });
 
-            user.IsSubscribedToPushNotifications = false;
-            _uow.GetRepository<User>().Update(user);
-            
-            _uow.GetRepository<PushSubscription>().Remove(user.PushSubscription);
-            
             await _uow.SaveChangesAsync();
-        }
-
-        public async Task<bool> IsSubscribedAsync(Guid userId)
-        {
-            bool isSubscribed = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
-                selector: u => u.IsSubscribedToPushNotifications,
-                predicate: u => u.Id == userId);
-
-            return isSubscribed;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace WebCalendar.WebApi.Controllers
         }
 
         [HttpPost("subscribe/{userId}")]
-        public async Task<IActionResult> Subscribe(string userId, [FromBody] PushSubscriptionModel pushSubscription)
+        public async Task<ActionResult<Guid>> Subscribe(string userId, [FromBody] PushSubscriptionModel pushSubscription)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
@@ -40,13 +40,14 @@ namespace WebCalendar.WebApi.Controllers
             PushSubscriptionServiceModel pushSubscriptionServiceModel = _mapper
                 .Map<PushSubscriptionModel, PushSubscriptionServiceModel>(pushSubscription);
 
-            await _pushNotificationService.SubscribeOnPushNotificationAsync(user.Id, pushSubscriptionServiceModel);
+            Guid pushId = await _pushNotificationService
+                .SubscribeOnPushNotificationAsync(user.Id, pushSubscriptionServiceModel);
 
-            return Ok();
+            return Ok(pushId);
         }
 
-        [HttpDelete("unsubscribe/{userId}")]
-        public async Task<IActionResult> Unsubscribe(string userId)
+        [HttpDelete("unsubscribe/{userId}/{pushId}")]
+        public async Task<IActionResult> Unsubscribe(string userId, string pushId)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
@@ -55,25 +56,9 @@ namespace WebCalendar.WebApi.Controllers
                 return Unauthorized();
             }
 
-            await _pushNotificationService.UnsubscribeFromPushNotificationAsync(user.Id);
+            await _pushNotificationService.UnsubscribeFromPushNotificationAsync(new Guid(pushId));
 
             return Ok();
-        }
-
-        [HttpGet("isSubscribed/{userId}")]
-        [AllowAnonymous]
-        public async Task<ActionResult<bool>> IsSubscribed(string userId)
-        {
-            UserServiceModel user = await _userService.GetByPrincipalAsync(User);
-
-            if (user.Id.ToString() != userId)
-            {
-                return Unauthorized();
-            }
-
-            bool isSubscribed = await _pushNotificationService.IsSubscribedAsync(user.Id);
-
-            return Ok(isSubscribed);
         }
 
         [HttpPost("test/{userId}")]
