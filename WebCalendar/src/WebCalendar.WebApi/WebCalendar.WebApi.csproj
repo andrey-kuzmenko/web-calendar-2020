@@ -35,6 +35,8 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
           <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
+        <None Include="ClientApp\src\assets\manifest.json" />
+        <None Include="ClientApp\src\manifest.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -57,6 +59,7 @@
       <Folder Include="ClientApp\src\app\modules\calendar\components" />
       <Folder Include="ClientApp\src\app\modules\calendar\pages" />
       <Folder Include="ClientApp\src\app\modules\home\pages" />
+      <Folder Include="ClientApp\src\assets" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

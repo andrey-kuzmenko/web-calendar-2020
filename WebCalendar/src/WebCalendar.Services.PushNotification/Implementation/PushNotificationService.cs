@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+using CorePush.Google;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
+using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.PushNotification.Contracts;
 using WebCalendar.Services.PushNotification.Models;
-using WebPush;
-using PushSubscription = WebCalendar.DAL.Models.Entities.PushSubscription;
 using Task = System.Threading.Tasks.Task;
 
 namespace WebCalendar.Services.PushNotification.Implementation
@@ -15,55 +13,59 @@ namespace WebCalendar.Services.PushNotification.Implementation
     public class PushNotificationService: IPushNotificationService
     {
         private readonly IUnitOfWork _uow;
-        private readonly WebPushClient _webPushClient;
-        private readonly IMapper _mapper;
+        private readonly FirebaseNotification _firebaseNotification;
 
-        public PushNotificationService(WebPushClient webPushClient, IUnitOfWork uow, IMapper mapper, VapidDetails vapidDetails)
+        public PushNotificationService(IUnitOfWork uow, IMapper mapper, FirebaseNotification firebaseNotification)
         {
-            _webPushClient = webPushClient;
             _uow = uow;
-            _mapper = mapper;
-            
-            WebPush.VapidDetails details = _mapper.Map<VapidDetails, WebPush.VapidDetails>(vapidDetails);
-            _webPushClient.SetVapidDetails(details);
+            _firebaseNotification = firebaseNotification;
         }
-
-        public async Task SendNotificationAsync(NotificationServiceModel notificationService, Guid userId)
+        
+        public async Task SendNotificationAsync(NotificationServiceModel notification, Guid userId)
         {
-            IEnumerable<PushSubscription> repositoryPushSubscriptions = await _uow.GetRepository<PushSubscription>()
+            IEnumerable<PushSubscription> pushSubscriptions = await _uow.GetRepository<PushSubscription>()
                 .GetAllAsync(p => p.UserId == userId);
 
-            IEnumerable<WebPush.PushSubscription> pushSubscriptions = _mapper
-                .Map<IEnumerable<PushSubscription>, IEnumerable<WebPush.PushSubscription>>(repositoryPushSubscriptions);
-
-            string serializedNotification = JsonConvert.SerializeObject(notificationService);
-
-            foreach (WebPush.PushSubscription pushSubscription in pushSubscriptions)
+            using var fcm = new FcmSender(_firebaseNotification.ServerKey, _firebaseNotification.SenderId);
+            foreach (PushSubscription pushSubscription in pushSubscriptions)
             {
-                await _webPushClient.SendNotificationAsync(pushSubscription, serializedNotification);
+                await fcm.SendAsync(pushSubscription.DeviceToken, new
+                {
+                    notification = new
+                    {
+                        title = notification.Title,
+                        body = notification.Message,
+                        click_action = notification.Url
+                    },
+                });
             }
         }
 
-        public async Task<Guid> SubscribeOnPushNotificationAsync(Guid userId, PushSubscriptionServiceModel pushSubscriptionServiceModel)
+        public async Task SubscribeOnPushNotificationAsync(Guid userId, string token)
         {
-            PushSubscription pushSubscription = _mapper
-                .Map<PushSubscriptionServiceModel, PushSubscription>(pushSubscriptionServiceModel);
-
-            pushSubscription.UserId = userId;
+            var pushSubscription = new PushSubscription
+            {
+                DeviceToken = token,
+                UserId = userId
+            };
 
             await _uow.GetRepository<PushSubscription>().AddAsync(pushSubscription);
 
             await _uow.SaveChangesAsync();
-
-            return pushSubscription.Id;
         }
 
-        public async Task UnsubscribeFromPushNotificationAsync(Guid pushId)
+        public async Task UnsubscribeFromPushNotificationAsync(Guid userId, string token)
         {
-            _uow.GetRepository<PushSubscription>().Remove(new PushSubscription
+            IEnumerable<PushSubscription> pushSubscriptions = await _uow.GetRepository<PushSubscription>().GetAllAsync(
+                p => p.UserId == userId && p.DeviceToken == token);
+
+            foreach (PushSubscription pushSubscription in pushSubscriptions)
             {
-                Id = pushId
-            });
+                _uow.GetRepository<PushSubscription>().Remove(new PushSubscription
+                {
+                    Id = pushSubscription.Id
+                });
+            }
 
             await _uow.SaveChangesAsync();
         }

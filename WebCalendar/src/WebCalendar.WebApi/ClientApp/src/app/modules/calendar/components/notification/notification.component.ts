@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NotificationMiddlewareService} from "../../../../core/service/notification-middleware.service";
+import {PushNotificationService} from "../../../../core/service/push-notification.service";
 
 @Component({
   selector: 'app-notification',
@@ -8,12 +8,14 @@ import {NotificationMiddlewareService} from "../../../../core/service/notificati
 })
 export class NotificationComponent implements OnInit {
 
-  constructor(private notificationMiddleware: NotificationMiddlewareService) { }
+  constructor(public pushNotificationService: PushNotificationService) {
+
+  }
 
   ngOnInit(): void {
   }
 
   toggleSubscription() {
-    this.notificationMiddleware.toggleSubscription();
+    this.pushNotificationService.toggleSubscription();
   }
 }

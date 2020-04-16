@@ -6,9 +6,9 @@ namespace WebCalendar.Services.PushNotification.Contracts
 {
     public interface IPushNotificationService
     {
-        Task SendNotificationAsync(NotificationServiceModel notificationService, Guid userId);
-        Task<Guid> SubscribeOnPushNotificationAsync(Guid userId, PushSubscriptionServiceModel pushSubscriptionServiceModel);
-        Task UnsubscribeFromPushNotificationAsync(Guid pushId);
+        Task SendNotificationAsync(NotificationServiceModel notification, Guid userId);
+        Task SubscribeOnPushNotificationAsync(Guid userId, string token);
+        Task UnsubscribeFromPushNotificationAsync(Guid userId, string token);
 
     }
 }

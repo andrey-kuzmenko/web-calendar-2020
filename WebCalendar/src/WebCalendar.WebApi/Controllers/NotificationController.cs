@@ -28,35 +28,31 @@ namespace WebCalendar.WebApi.Controllers
         }
 
         [HttpPost("subscribe/{userId}")]
-        public async Task<ActionResult<Guid>> Subscribe(string userId, [FromBody] PushSubscriptionModel pushSubscription)
+        public async Task<IActionResult> Subscribe(Guid userId, [FromBody] PushSubscriptionModel pushSubscriptionModel)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
-            if (user.Id.ToString() != userId)
+            if (user.Id != userId)
             {
                 return Unauthorized();
             }
 
-            PushSubscriptionServiceModel pushSubscriptionServiceModel = _mapper
-                .Map<PushSubscriptionModel, PushSubscriptionServiceModel>(pushSubscription);
+            await _pushNotificationService.SubscribeOnPushNotificationAsync(user.Id, pushSubscriptionModel.DeviceToken);
 
-            Guid pushId = await _pushNotificationService
-                .SubscribeOnPushNotificationAsync(user.Id, pushSubscriptionServiceModel);
-
-            return Ok(pushId);
+            return Ok();
         }
 
-        [HttpDelete("unsubscribe/{userId}/{pushId}")]
-        public async Task<IActionResult> Unsubscribe(string userId, string pushId)
+        [HttpPost("unsubscribe/{userId}")]
+        public async Task<IActionResult> Unsubscribe(Guid userId, [FromBody] PushSubscriptionModel pushSubscriptionModel)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
-            if (user.Id.ToString() != userId)
+            if (user.Id != userId)
             {
                 return Unauthorized();
             }
 
-            await _pushNotificationService.UnsubscribeFromPushNotificationAsync(new Guid(pushId));
+            await _pushNotificationService.UnsubscribeFromPushNotificationAsync(user.Id, pushSubscriptionModel.DeviceToken);
 
             return Ok();
         }
@@ -64,7 +60,7 @@ namespace WebCalendar.WebApi.Controllers
         [HttpPost("test/{userId}")]
         [AllowAnonymous]
         [Obsolete("for test")]
-        public async Task<ActionResult> Push(string userId, [FromBody] NotificationModel notificationModel)
+        public async Task<ActionResult> Push(Guid userId, [FromBody] NotificationModel notificationModel)
         {
             await _pushNotificationService.SendNotificationAsync(new NotificationServiceModel
                 {
@@ -72,7 +68,7 @@ namespace WebCalendar.WebApi.Controllers
                     Title = notificationModel.Title,
                     Url = notificationModel.Url
                 },
-                new Guid(userId));
+                userId);
 
             return Ok();
         }
