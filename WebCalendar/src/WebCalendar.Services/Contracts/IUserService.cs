@@ -29,8 +29,6 @@ namespace WebCalendar.Services.Contracts
         Task SubscribeOnPushNotificationAsync(Guid userId, string token);
         Task UnsubscribeFromPushNotificationAsync(Guid userId, string token);
 
-        Task SendNotificationAsync(Guid userId, 
-            INotificable notificableEntity,
-            Notification type);
+        Task SendNotificationAsync(INotificable notificableEntity, Notification type);
     }
 }
