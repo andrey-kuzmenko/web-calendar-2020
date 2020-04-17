@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using WebCalendar.Services.Models.Notification;
 using WebCalendar.Services.Models.User;
 
 namespace WebCalendar.Services.Contracts
@@ -27,6 +28,8 @@ namespace WebCalendar.Services.Contracts
         Task SubscribeOnPushNotificationAsync(Guid userId, string token);
         Task UnsubscribeFromPushNotificationAsync(Guid userId, string token);
 
-        Task SendNotificationAsync(Guid userId);
+        Task SendNotificationAsync(Guid userId, 
+            INotificableServiceModel notificableServiceModel, 
+            Notification type);
     }
 }

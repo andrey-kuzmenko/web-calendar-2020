@@ -10,10 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
+using WebCalendar.DAL.Models;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.EmailSender.Contracts;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.Services.Contracts;
+using WebCalendar.Services.Models.Notification;
 using WebCalendar.Services.Models.User;
 using Task = System.Threading.Tasks.Task;
 
@@ -188,7 +190,8 @@ namespace WebCalendar.Services.Implementation
             await _uow.SaveChangesAsync();
         }
 
-        public async Task SendNotificationAsync(Guid userId)
+        public async Task SendNotificationAsync(Guid userId, INotificableServiceModel notificableServiceModel, 
+            Notification type)
         {
             User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
                 predicate: u => u.Id == userId,
