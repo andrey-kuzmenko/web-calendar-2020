@@ -1,4 +1,4 @@
-﻿namespace WebCalendar.Services.PushNotification
+﻿namespace WebCalendar.PushNotification
 {
     public class FirebaseNotification
     {

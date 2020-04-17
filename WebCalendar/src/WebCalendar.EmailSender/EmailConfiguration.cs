@@ -1,4 +1,4 @@
-﻿namespace WebCalendar.Services.EmailSender
+﻿namespace WebCalendar.EmailSender
 {
     public class EmailConfiguration
     {

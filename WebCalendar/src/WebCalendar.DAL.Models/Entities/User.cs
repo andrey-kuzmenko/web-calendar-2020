@@ -15,8 +15,8 @@ namespace WebCalendar.DAL.Models.Entities
         
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        
-        public bool IsSubscribedToEmailNotifications { get; set; }
+
+        public bool IsSubscribedToEmailNotifications { get; set; } = true;
         public bool IsDeleted { get; set; }
 
         public ICollection<CalendarUser> CalendarUsers { get; set; }

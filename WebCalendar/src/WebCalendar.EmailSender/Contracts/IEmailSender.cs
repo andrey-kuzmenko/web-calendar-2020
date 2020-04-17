@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using WebCalendar.Services.EmailSender.Models;
+using WebCalendar.EmailSender.Models;
 
-namespace WebCalendar.Services.EmailSender.Contracts
+namespace WebCalendar.EmailSender.Contracts
 {
     public interface IEmailSender
     {

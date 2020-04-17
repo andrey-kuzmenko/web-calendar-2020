@@ -1,6 +1,6 @@
-﻿namespace WebCalendar.Services.PushNotification.Models
+﻿namespace WebCalendar.PushNotification.Models
 {
-    public class NotificationServiceModel
+    public class Notification
     {
         public string Title { get; set; }
         public string Message { get; set; }

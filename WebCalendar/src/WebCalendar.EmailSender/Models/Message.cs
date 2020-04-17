@@ -2,7 +2,7 @@
 using System.Linq;
 using MimeKit;
 
-namespace WebCalendar.Services.EmailSender.Models
+namespace WebCalendar.EmailSender.Models
 {
     public class Message
     {

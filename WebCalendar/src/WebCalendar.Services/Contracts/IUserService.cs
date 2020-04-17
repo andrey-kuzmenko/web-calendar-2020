@@ -11,7 +11,7 @@ namespace WebCalendar.Services.Contracts
     {
         Task<IEnumerable<UserServiceModel>> GetAllAsync();
         Task<UserServiceModel> GetByIdAsync(Guid id);
-        Task UpdateAsync(UserEditionServiceModel entity);
+        Task UpdateAsync(UserServiceModel entity);
         Task RemoveAsync(Guid id);
         Task RemoveAsync(UserServiceModel entity);
 
@@ -20,5 +20,13 @@ namespace WebCalendar.Services.Contracts
         Task<IdentityResult> RegisterAsync(UserRegisterServiceModel userRegisterServiceModel);
         Task<UserTokenServiceModel> AuthenticateAsync(UserAuthenticateServiceModel userAuthenticateServiceModel);
         Task Logout();
+        
+        Task SubscribeOnEmailNotificationAsync(Guid userId);
+        Task UnsubscribeFromEmailNotificationAsync(Guid userId);
+        
+        Task SubscribeOnPushNotificationAsync(Guid userId, string token);
+        Task UnsubscribeFromPushNotificationAsync(Guid userId, string token);
+
+        Task SendNotificationAsync(Guid userId);
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MimeKit;
-using WebCalendar.Services.EmailSender.Contracts;
-using WebCalendar.Services.EmailSender.Models;
+using WebCalendar.EmailSender.Contracts;
+using WebCalendar.EmailSender.Models;
 
-namespace WebCalendar.Services.EmailSender.Implementation
+namespace WebCalendar.EmailSender.Implementation
 {
     public class EmailSender : IEmailSender
     {
@@ -17,7 +17,7 @@ namespace WebCalendar.Services.EmailSender.Implementation
 
         public async Task SendEmailAsync(Message message)
         {
-            var mailMessage = CreateEmailMessage(message);
+            MimeMessage mailMessage = CreateEmailMessage(message);
  
             await SendAsync(mailMessage);
         }

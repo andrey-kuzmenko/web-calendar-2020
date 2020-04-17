@@ -5,10 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebCalendar.Common.Contracts;
+using WebCalendar.DAL;
 using WebCalendar.DAL.Models.Entities;
+using WebCalendar.EmailSender.Contracts;
+using WebCalendar.PushNotification.Contracts;
 using WebCalendar.Services.Contracts;
 using WebCalendar.Services.Models.User;
 using Task = System.Threading.Tasks.Task;
@@ -21,14 +25,21 @@ namespace WebCalendar.Services.Implementation
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
-
+        private readonly IUnitOfWork _uow;
+        private readonly IPushNotificationSender _pushNotificationSender;
+        private readonly IEmailSender _emailSender;
+        
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, 
-            IConfiguration config)
+            IConfiguration config, IUnitOfWork uow, IPushNotificationSender pushNotificationSender, 
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _config = config;
+            _uow = uow;
+            _pushNotificationSender = pushNotificationSender;
+            _emailSender = emailSender;
         }
 
         public Task<IEnumerable<UserServiceModel>> GetAllAsync()
@@ -45,9 +56,18 @@ namespace WebCalendar.Services.Implementation
             return userServiceModel;
         }
 
-        public Task UpdateAsync(UserEditionServiceModel entity)
+        public async Task UpdateAsync(UserServiceModel entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+            {
+                return;
+            }
+
+            User user = _mapper.Map<UserServiceModel, User>(entity);
+
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
         }
 
         public Task RemoveAsync(Guid id)
@@ -122,6 +142,61 @@ namespace WebCalendar.Services.Implementation
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+        
+        public async Task SubscribeOnEmailNotificationAsync(Guid userId)
+        {
+            /*UserServiceModel userServiceModel = await _userService.GetByIdAsync(userId);
+
+            userServiceModel.IsSubscribedToEmailNotifications = true;
+
+            await _userService.UpdateAsync(userServiceModel);*/
+            throw new NotImplementedException();
+        }
+
+        public Task UnsubscribeFromEmailNotificationAsync(Guid userId)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public async Task SubscribeOnPushNotificationAsync(Guid userId, string token)
+        {
+            var pushSubscription = new PushSubscription
+            {
+                DeviceToken = token,
+                UserId = userId
+            };
+
+            await _uow.GetRepository<PushSubscription>().AddAsync(pushSubscription);
+
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task UnsubscribeFromPushNotificationAsync(Guid userId, string token)
+        {
+            IEnumerable<PushSubscription> pushSubscriptions = await _uow.GetRepository<PushSubscription>().GetAllAsync(
+                p => p.UserId == userId && p.DeviceToken == token);
+
+            foreach (PushSubscription pushSubscription in pushSubscriptions)
+            {
+                _uow.GetRepository<PushSubscription>().Remove(new PushSubscription
+                {
+                    Id = pushSubscription.Id
+                });
+            }
+
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task SendNotificationAsync(Guid userId)
+        {
+            User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
+                predicate: u => u.Id == userId,
+                include: users => users.Include(u => u.PushSubscriptions));
+            
+            //await _emailSender.SendEmailAsync()
+            
+            throw new NotImplementedException();
         }
     }
 }

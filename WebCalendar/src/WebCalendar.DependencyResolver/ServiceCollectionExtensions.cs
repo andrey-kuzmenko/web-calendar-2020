@@ -12,13 +12,13 @@ using WebCalendar.DAL.Models.Entities;
 using WebCalendar.DAL.Repositories.Contracts;
 using WebCalendar.DAL.Repositories.Implementation;
 using WebCalendar.Services.Contracts;
-using WebCalendar.Services.EmailSender;
-using WebCalendar.Services.EmailSender.Contracts;
-using WebCalendar.Services.EmailSender.Implementation;
+using WebCalendar.EmailSender;
+using WebCalendar.EmailSender.Contracts;
+using WebCalendar.EmailSender.Implementation;
 using WebCalendar.Services.Implementation;
-using WebCalendar.Services.PushNotification;
-using WebCalendar.Services.PushNotification.Contracts;
-using WebCalendar.Services.PushNotification.Implementation;
+using WebCalendar.PushNotification;
+using WebCalendar.PushNotification.Contracts;
+using WebCalendar.PushNotification.Implementation;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -64,7 +64,7 @@ namespace WebCalendar.DependencyResolver
 
             services.AddSingleton<IMapper, WebCalendarAutoMapper>();
 
-            services.AddScoped<IPushNotificationService, PushNotificationService>();
+            services.AddScoped<IPushNotificationSender, PushNotificationSender>();
             
             var vapidDetails = configuration
                 .GetSection("FirebaseNotification")
@@ -72,7 +72,7 @@ namespace WebCalendar.DependencyResolver
 
             services.AddSingleton(vapidDetails);
 
-            services.AddScoped<IEmailSender, EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>();
         }
     }
 }
