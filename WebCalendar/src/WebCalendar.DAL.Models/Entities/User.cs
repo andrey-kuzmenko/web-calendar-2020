@@ -14,14 +14,17 @@ namespace WebCalendar.DAL.Models.Entities
         }
         
         public string FirstName { get; set; }
-        public string SecondName { get; set; }
-        public bool IsSubscribedToNativeNotifications { get; set; }
+        public string LastName { get; set; }
+        public bool IsSubscribedToNativeNotifications { get; set; } = true;
         public bool IsSubscribedToEmailNotifications { get; set; }
         public bool IsDeleted { get; set; }
 
         public ICollection<CalendarUser> CalendarUsers { get; set; }
         public ICollection<Calendar> Calendars { get; set; }
         public ICollection<UserEvent> UserEvents { get; set; }
+
+        public Guid? PushSubscriptionId { get; set; }
+        public PushSubscription PushSubscription { get; set; }
 
         public DateTime AddedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

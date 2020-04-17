@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Configurations" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\WebCalendar.Common\WebCalendar.Common.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
     </ItemGroup>

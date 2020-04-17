@@ -2,7 +2,7 @@ using System;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Task  : IEntity, ISoftDeletable
+    public class Task  : IEntity, IActivity, ISoftDeletable
     {
         public Guid Id { get; set; }
         public DateTime AddedDate { get; set; }
@@ -12,7 +12,7 @@ namespace WebCalendar.DAL.Models.Entities
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime StartTime { get; set; } 
+        public DateTime StartTime { get; set; }
         public bool IsDone { get; set; }
 
         public Guid CalendarId { get; set; }

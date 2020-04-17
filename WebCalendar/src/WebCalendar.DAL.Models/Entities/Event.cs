@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using WebCalendar.DAL.Models.Entities.Enums;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Event  : IEntity, ISoftDeletable
+    public class Event : IEntity, IRepeatableActivity, ISoftDeletable
     {
         public Event()
         {
@@ -19,10 +18,16 @@ namespace WebCalendar.DAL.Models.Entities
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public DateTime StartTime { get; set; } 
-        public DateTime EndTime { get; set; } 
-        public NotifyBeforeMode NotifyBeforeMode { get; set; }
-        public RepeatMode RepeatMode { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public TimeSpan NotifyAt { get; set; }
+        public TimeSpan? NotifyBeforeInterval { get; set; }
+        public int? RepetitionsCount { get; set; }
+
+        public ICollection<int> DaysOfWeek { get; set; }
+        public ICollection<int> DaysOfMounth { get; set; }
+        public ICollection<int> Monthes { get; set; }
+        public ICollection<int> Years { get; set; }
 
         public Guid CalendarId { get; set; }
         public Calendar Calendar { get; set; }

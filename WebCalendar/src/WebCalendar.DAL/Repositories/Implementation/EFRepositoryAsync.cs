@@ -10,7 +10,7 @@ using WebCalendar.DAL.Repositories.Contracts;
 
 namespace WebCalendar.DAL.Repositories.Implementation
 {
-    public class EFRepositoryAsync<T> : IAsyncRepository<T> where T : class 
+    public class EFRepositoryAsync<T> : IAsyncRepository<T> where T : class
     {
         private readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -21,7 +21,7 @@ namespace WebCalendar.DAL.Repositories.Implementation
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<IList<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true, bool ignoreQueryFilters = false)
@@ -47,6 +47,7 @@ namespace WebCalendar.DAL.Repositories.Implementation
             {
                 query = query.IgnoreQueryFilters();
             }
+
             if (orderBy != null)
             {
                 return await orderBy(query).ToListAsync();
@@ -90,6 +91,41 @@ namespace WebCalendar.DAL.Repositories.Implementation
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<TResult> GetFirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true,
+            bool ignoreQueryFilters = false)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).Select(selector).FirstOrDefaultAsync();
+            }
+
+            return await query.Select(selector).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
         {
             return await _context.Set<T>().Where(predicate).ToListAsync();
@@ -113,7 +149,7 @@ namespace WebCalendar.DAL.Repositories.Implementation
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            
+
             return entity;
         }
 
