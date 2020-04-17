@@ -4,17 +4,15 @@ using WebCalendar.DAL.Models.Entities;
 
 namespace WebCalendar.DAL.EF.Configurations
 {
-    public class ReminderConfiguration : IEntityTypeConfiguration<Reminder>
+    public class ReminderConfiguration : RepeatableActivityConfiguration<Reminder>
     {
-        public void Configure(EntityTypeBuilder<Reminder> builder)
+        public override void Configure(EntityTypeBuilder<Reminder> builder)
         {
+            ConvertFieds(builder);
+
             builder.HasOne(r => r.Calendar)
                 .WithMany(c => c.Reminders)
                 .HasForeignKey(r => r.CalendarId);
-
-            builder.HasMany(r => r.ReminderDays)
-                .WithOne(rd => rd.Reminder)
-                .HasForeignKey(rd => rd.ReminderId);
         }
     }
 }

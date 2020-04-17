@@ -7,7 +7,7 @@ namespace WebCalendar.Services.Mapper
 {
     public class EventServiceModelProfile : AutoMapperProfile
     {
-        public EventServiceModelProfile()
+        public EventServiceModelProfile()//Без понятия нормально ли оно маппит события
         {
             CreateMap<EventCreationServiceModel, Event>()
                 .ForMember(ue => ue.UserEvents,
@@ -15,9 +15,7 @@ namespace WebCalendar.Services.Mapper
                         new UserEvent
                         {
                             UserId = su.Id //NEED TO TEST IT 
-                        })))
-                .ForMember(e => e.EventDays,
-                    o => o.MapFrom(e => e.Days));
+                        })));
 
 
             CreateMap<EventEditionServiceModel, Event>()
@@ -27,16 +25,11 @@ namespace WebCalendar.Services.Mapper
                         {
                             UserId = su.Id,
                             EventId = c.Id
-                        })))
-                .ForMember(e => e.EventDays,
-                    o => o.MapFrom(e => e.Days));
+                        })));
 
             CreateMap<Event, EventServiceModel>()
                 .ForMember(e => e.SubscribedUsers,
-                    o => o.MapFrom(e => e.UserEvents.Select(ue => ue.User)))
-                .ForMember(e => e.Days,
-                    o => o.MapFrom(e => e.EventDays.Select(ed =>
-                        ed.Day.Value)));
+                    o => o.MapFrom(e => e.UserEvents.Select(ue => ue.User)));
 
             CreateMap<EventServiceModel, Event>()
                 .ForMember(ue => ue.UserEvents,
@@ -45,9 +38,7 @@ namespace WebCalendar.Services.Mapper
                         {
                             UserId = su.Id,
                             EventId = c.Id
-                        })))
-                .ForMember(e => e.EventDays,
-                    o => o.MapFrom(e => e.Days)); ;
+                        })));
         }
     }
 }
