@@ -9,22 +9,13 @@ namespace WebCalendar.Services.Mapper
     {
         public ReminderServiceModelProfile()
         {
-            CreateMap<ReminderCreationServiceModel, Reminder>()
-                .ForMember(e => e.ReminderDays,
-                    o => o.MapFrom(e => e.Days));
+            CreateMap<ReminderCreationServiceModel, Reminder>();
 
-            CreateMap<ReminderEditionServiceModel, Reminder>()
-                .ForMember(e => e.ReminderDays,
-                    o => o.MapFrom(e => e.Days));
+            CreateMap<ReminderEditionServiceModel, Reminder>();
 
-            CreateMap<Reminder, ReminderServiceModel>()
-                .ForMember(e => e.Days,
-                    o => o.MapFrom(e => e.ReminderDays.Select(ed =>
-                        ed.Day.Value)));
+            CreateMap<Reminder, ReminderServiceModel>();
 
-            CreateMap<ReminderServiceModel, Reminder>()
-                .ForMember(e => e.ReminderDays,
-                    o => o.MapFrom(e => e.Days));
+            CreateMap<ReminderServiceModel, Reminder>();
         }
     }
 }

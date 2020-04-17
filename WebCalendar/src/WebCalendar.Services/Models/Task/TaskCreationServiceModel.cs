@@ -1,8 +1,9 @@
 ﻿using System;
+using WebCalendar.DAL.Models;
 
 namespace WebCalendar.Services.Models.Task
 {
-    public class TaskCreationServiceModel
+    public class TaskCreationServiceModel : IActivity
     {
         public string Name { get; set; }
         public string Description { get; set; }
