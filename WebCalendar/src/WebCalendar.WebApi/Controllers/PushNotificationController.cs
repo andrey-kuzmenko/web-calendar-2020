@@ -14,17 +14,15 @@ namespace WebCalendar.WebApi.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class NotificationController: ControllerBase
+    public class PushNotificationController: ControllerBase
     {
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public NotificationController(IPushNotificationService pushNotificationService, IUserService userService, IMapper mapper)
+        public PushNotificationController(IPushNotificationService pushNotificationService, IUserService userService)
         {
             _pushNotificationService = pushNotificationService;
             _userService = userService;
-            _mapper = mapper;
         }
 
         [HttpPost("subscribe/{userId}")]
@@ -60,15 +58,9 @@ namespace WebCalendar.WebApi.Controllers
         [HttpPost("test/{userId}")]
         [AllowAnonymous]
         [Obsolete("for test")]
-        public async Task<ActionResult> Push(Guid userId, [FromBody] NotificationModel notificationModel)
+        public async Task<ActionResult> Push(Guid userId, [FromBody] NotificationServiceModel notificationModel)
         {
-            await _pushNotificationService.SendNotificationAsync(new NotificationServiceModel
-                {
-                    Message = notificationModel.Message,
-                    Title = notificationModel.Title,
-                    Url = notificationModel.Url
-                },
-                userId);
+            await _pushNotificationService.SendNotificationAsync(notificationModel, userId);
 
             return Ok();
         }

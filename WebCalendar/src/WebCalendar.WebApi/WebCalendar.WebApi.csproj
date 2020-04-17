@@ -35,8 +35,6 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
           <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         </Content>
-        <None Include="ClientApp\src\assets\manifest.json" />
-        <None Include="ClientApp\src\manifest.json" />
     </ItemGroup>
 
     <ItemGroup>

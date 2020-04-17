@@ -85,7 +85,7 @@ export class PushNotificationService implements OnInit {
       localStorage.setItem("pushNotificationToken", JSON.stringify(token));
       this.zone.run(() => this.checkSubscribe());
 
-      this.http.post(`${environment.apiUrl}/notification/subscribe/${currentUser.id}`,
+      this.http.post(`${environment.apiUrl}/PushNotification/subscribe/${currentUser.id}`,
         {deviceToken: token})
         .subscribe(result => {
           this.zone.run(() => {
@@ -107,7 +107,7 @@ export class PushNotificationService implements OnInit {
       localStorage.removeItem("pushNotificationToken");
       this.checkSubscribe();
 
-      this.http.post(`${environment.apiUrl}/notification/unsubscribe/${currentUser.id}`,
+      this.http.post(`${environment.apiUrl}/PushNotification/unsubscribe/${currentUser.id}`,
         {deviceToken: token})
         .subscribe(result => {
           this.zone.run(() => {
