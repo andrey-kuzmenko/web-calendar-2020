@@ -54,6 +54,7 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IReminderService, ReminderService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

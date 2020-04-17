@@ -5,17 +5,12 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
-using WebCalendar.DAL.Models;
 using WebCalendar.DAL.Models.Entities;
-using WebCalendar.EmailSender.Contracts;
-using WebCalendar.PushNotification.Contracts;
 using WebCalendar.Services.Contracts;
-using WebCalendar.Services.Models.Notification;
 using WebCalendar.Services.Models.User;
 using Task = System.Threading.Tasks.Task;
 
@@ -28,20 +23,15 @@ namespace WebCalendar.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IUnitOfWork _uow;
-        private readonly IPushNotificationSender _pushNotificationSender;
-        private readonly IEmailSender _emailSender;
-        
+
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, 
-            IConfiguration config, IUnitOfWork uow, IPushNotificationSender pushNotificationSender, 
-            IEmailSender emailSender)
+            IConfiguration config, IUnitOfWork uow)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _config = config;
             _uow = uow;
-            _pushNotificationSender = pushNotificationSender;
-            _emailSender = emailSender;
         }
 
         public Task<IEnumerable<UserServiceModel>> GetAllAsync()
@@ -148,19 +138,35 @@ namespace WebCalendar.Services.Implementation
         
         public async Task SubscribeOnEmailNotificationAsync(Guid userId)
         {
-            /*UserServiceModel userServiceModel = await _userService.GetByIdAsync(userId);
+            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
 
-            userServiceModel.IsSubscribedToEmailNotifications = true;
+            user.IsSubscribedToEmailNotifications = true;
 
-            await _userService.UpdateAsync(userServiceModel);*/
-            throw new NotImplementedException();
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
         }
 
-        public Task UnsubscribeFromEmailNotificationAsync(Guid userId)
+        public async Task UnsubscribeFromEmailNotificationAsync(Guid userId)
         {
-            throw new NotImplementedException();
+            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
+
+            user.IsSubscribedToEmailNotifications = false;
+
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
         }
-        
+
+        public async Task<bool> IsSubscribeOnEmailNotificationAsync(Guid userId)
+        {
+            bool isSubscribe = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
+                selector: u => u.IsSubscribedToEmailNotifications,
+                predicate: u => u.Id == userId);
+
+            return isSubscribe;
+        }
+
         public async Task SubscribeOnPushNotificationAsync(Guid userId, string token)
         {
             var pushSubscription = new PushSubscription

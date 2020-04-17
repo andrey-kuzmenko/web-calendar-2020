@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthenticationService} from "../../core/service/authentication.service";
+import {PushNotificationService} from "../../core/service/push-notification.service";
 
 @Component({
   selector: 'app-main-layout',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainLayoutComponent implements OnInit {
 
-  constructor() { }
+  constructor(public authenticationService: AuthenticationService,
+              private pushNotificationService: PushNotificationService) { }
 
   ngOnInit(): void {
   }
 
+  logout() {
+    this.pushNotificationService.pushUnsubscribe()
+      .subscribe(() => this.authenticationService.logout());
+
+  }
 }

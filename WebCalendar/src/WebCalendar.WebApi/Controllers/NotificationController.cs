@@ -20,6 +20,7 @@ namespace WebCalendar.WebApi.Controllers
             _userService = userService;
         }
 
+        //PUT: api/notification/email/subscribe/{userId}
         [HttpPut("email/subscribe/{userId}")]
         public async Task<IActionResult> SubscribeOnEmailNotification(Guid userId)
         {
@@ -35,6 +36,7 @@ namespace WebCalendar.WebApi.Controllers
             return Ok();
         }
         
+        //PUT: api/notification/email/unsubscribe/{userId}
         [HttpPut("email/unsubscribe/{userId}")]
         public async Task<IActionResult> UnsubscribeFromEmailNotification(Guid userId)
         {
@@ -50,6 +52,23 @@ namespace WebCalendar.WebApi.Controllers
             return Ok();
         }
         
+        //PUT: api/notification/email/isSubscribe/{userId}
+        [HttpGet("email/isSubscribe/{userId}")]
+        public async Task<ActionResult<bool>> isSubscribeOnEmailNotification(Guid userId)
+        {
+            UserServiceModel user = await _userService.GetByPrincipalAsync(User);
+
+            if (user.Id != userId)
+            {
+                return Unauthorized();
+            }
+
+            bool isSubscribeOnEmailNotification = await _userService.IsSubscribeOnEmailNotificationAsync(user.Id);
+
+            return Ok(isSubscribeOnEmailNotification);
+        }
+        
+        //POST: api/notification/push/subscribe/{userId}
         [HttpPost("push/subscribe/{userId}")]
         public async Task<IActionResult> SubscribeOnPushNotification(Guid userId, 
             [FromBody] PushSubscriptionModel pushSubscriptionModel)
@@ -66,8 +85,10 @@ namespace WebCalendar.WebApi.Controllers
             return Ok();
         }
 
+        //POST: api/notification/push/unsubscribe/{userId}
         [HttpPost("push/unsubscribe/{userId}")]
-        public async Task<IActionResult> Unsubscribe(Guid userId, [FromBody] PushSubscriptionModel pushSubscriptionModel)
+        public async Task<IActionResult> UnsubscribeFromPushNotification(Guid userId, 
+            [FromBody] PushSubscriptionModel pushSubscriptionModel)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 

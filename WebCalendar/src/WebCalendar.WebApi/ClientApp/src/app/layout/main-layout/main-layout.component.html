@@ -4,14 +4,14 @@
     <ul class="navbar-nav text-right">
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdown2" role="button">
-          User
+          {{authenticationService.currentUserValue.email}}
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarDropdown2" class="dropdown-menu dropdown-menu-right">
           <!--<a ngbDropdownItem href="#" (click)="$event.preventDefault()">Action</a>
           <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Another action</a>
           <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Something else here</a>-->
           <a ngbDropdownItem routerLink="settings" ><i class="fas fa-sliders-h"></i> Settings</a>
-          <a ngbDropdownItem ><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a ngbDropdownItem (click)="logout()" ><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </li>
     </ul>

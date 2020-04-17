@@ -3,18 +3,20 @@ import { CommonModule } from '@angular/common';
 import {CalendarRoutingModule} from "./calendar-routing.module";
 import {CalendarComponent} from "./pages/calendar/calendar.component";
 import {FullCalendarModule} from "@fullcalendar/angular";
-import {NotificationComponent} from "./components/notification/notification.component";
 import { MainComponent } from './pages/main/main.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import {PushNotificationComponent} from "./components/push-notification/push-notification.component";
+import { EmailNotificationComponent } from './components/email-notification/email-notification.component';
 
 
 
 @NgModule({
     declarations: [
         CalendarComponent,
-        NotificationComponent,
+        PushNotificationComponent,
         MainComponent,
-        SettingsComponent
+        SettingsComponent,
+        EmailNotificationComponent
     ],
   imports: [
     CommonModule,

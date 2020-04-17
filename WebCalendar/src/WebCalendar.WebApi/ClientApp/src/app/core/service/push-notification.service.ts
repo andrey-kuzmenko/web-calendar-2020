@@ -2,9 +2,9 @@ import {Injectable, NgZone, OnInit} from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {AuthenticationService} from "./authentication.service";
-import {mergeMapTo} from "rxjs/operators";
+import {map, mergeMapTo} from "rxjs/operators";
 import {AngularFireMessaging} from "@angular/fire/messaging";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class PushNotificationService implements OnInit {
     isSubscribe: false,
     inProgress: false
   }
-  public pushNotificationStatusEmitter$ = new BehaviorSubject<{
+  public pushNotificationStatusSubject = new BehaviorSubject<{
     isSubscribe: boolean,
     inProgress: boolean
   }>(this.pushNotificationStatus);
@@ -26,7 +26,7 @@ export class PushNotificationService implements OnInit {
     private http: HttpClient,
     private authenticationService: AuthenticationService,
     private afMessaging: AngularFireMessaging,
-    private zone:NgZone) {
+    private zone: NgZone) {
 
     this.checkSubscribe();
 
@@ -44,7 +44,7 @@ export class PushNotificationService implements OnInit {
 
   checkSubscribe() {
     this.pushNotificationStatus.isSubscribe = localStorage.getItem("pushNotificationToken") != null;
-    this.pushNotificationStatusEmitter$.next(this.pushNotificationStatus);
+    this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
   }
 
   ngOnInit(): void {
@@ -56,7 +56,7 @@ export class PushNotificationService implements OnInit {
       return;
     }*/
     this.pushNotificationStatus.inProgress = true;
-    this.pushNotificationStatusEmitter$.next(this.pushNotificationStatus);
+    this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
 
     this.afMessaging.requestPermission
       .pipe(mergeMapTo(this.afMessaging.tokenChanges))
@@ -65,7 +65,7 @@ export class PushNotificationService implements OnInit {
           console.log('Permission granted! Save to the server!', token);
 
           localStorage.setItem("pushNotificationInit", JSON.stringify(true));
-          this.pushSubscribe();
+          this.pushSubscribe().subscribe();
         },
         (error) => {
           console.error(error);
@@ -77,11 +77,11 @@ export class PushNotificationService implements OnInit {
     return localStorage.getItem("pushNotificationInit") != null;
   }
 
-  pushSubscribe() {
+  pushSubscribe(): Observable<any> {
 
     const currentUser = this.authenticationService.currentUserValue;
 
-    this.afMessaging.getToken.subscribe(token => {
+    return this.afMessaging.getToken.pipe(map(token => {
       localStorage.setItem("pushNotificationToken", JSON.stringify(token));
       this.zone.run(() => this.checkSubscribe());
 
@@ -90,19 +90,19 @@ export class PushNotificationService implements OnInit {
         .subscribe(result => {
           this.zone.run(() => {
             this.pushNotificationStatus.inProgress = false;
-            this.pushNotificationStatusEmitter$.next(this.pushNotificationStatus);
+            this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
           });
         });
-    });
+    }));
   }
 
-  pushUnsubscribe() {
+  pushUnsubscribe(): Observable<any> {
     this.pushNotificationStatus.inProgress = true;
-    this.pushNotificationStatusEmitter$.next(this.pushNotificationStatus);
+    this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
 
     const currentUser = this.authenticationService.currentUserValue;
 
-    this.afMessaging.getToken.subscribe(token => {
+    return this.afMessaging.getToken.pipe(map(token => {
       this.afMessaging.deleteToken(token);
       localStorage.removeItem("pushNotificationToken");
       this.checkSubscribe();
@@ -112,15 +112,15 @@ export class PushNotificationService implements OnInit {
         .subscribe(result => {
           this.zone.run(() => {
             this.pushNotificationStatus.inProgress = false;
-            this.pushNotificationStatusEmitter$.next(this.pushNotificationStatus);
+            this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
           });
         });
-    });
+    }));
   }
 
   toggleSubscription() {
     if (this.pushNotificationStatus.isSubscribe) {
-      this.pushUnsubscribe();
+      this.pushUnsubscribe().subscribe();
     } else {
       this.init();
     }

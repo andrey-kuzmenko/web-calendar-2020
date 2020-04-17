@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {PushNotificationService} from "../../../../core/service/push-notification.service";
 
 @Component({
-  selector: 'app-notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  selector: 'app-push-notification',
+  templateUrl: './push-notification.component.html',
+  styleUrls: ['./push-notification.component.scss']
 })
-export class NotificationComponent implements OnInit {
+export class PushNotificationComponent implements OnInit {
 
   constructor(public pushNotificationService: PushNotificationService) {
 
