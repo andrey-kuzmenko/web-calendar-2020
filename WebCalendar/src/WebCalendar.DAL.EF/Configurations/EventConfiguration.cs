@@ -6,7 +6,7 @@ namespace WebCalendar.DAL.EF.Configurations
 {
     public class EventConfiguration : RepeatableActivityConfiguration<Event>
     {
-        public void Configure(EntityTypeBuilder<Event> builder)
+        public override void Configure(EntityTypeBuilder<Event> builder)
         {
             ConvertFieds(builder);
 

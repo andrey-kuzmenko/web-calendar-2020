@@ -49,11 +49,8 @@ namespace WebCalendar.DAL.EF.Context
                 .ApplyConfiguration<Event>(new EventConfiguration())
                 .ApplyConfiguration<Task>(new TaskConfiguration())
                 .ApplyConfiguration<Reminder>(new ReminderConfiguration())
-                .ApplyConfiguration<Day>(new DayConfiguration())
                 .ApplyConfiguration<CalendarUser>(new CalendarUserConfiguration())
                 .ApplyConfiguration<UserEvent>(new UserEventConfiguration())
-                .ApplyConfiguration<EventDay>(new EventDayConfiguration())
-                .ApplyConfiguration<ReminderDay>(new ReminderDayConfiguration())
                 .ApplyConfiguration<PushSubscription>(new PushSubscriptionConfiguration());
         }
         
