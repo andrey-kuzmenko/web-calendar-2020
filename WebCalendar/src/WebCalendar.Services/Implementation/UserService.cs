@@ -189,16 +189,5 @@ namespace WebCalendar.Services.Implementation
 
             await _uow.SaveChangesAsync();
         }
-
-        public async Task SendNotificationAsync(INotificable notificableEnity, Notification type)
-        {
-            /*User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
-                predicate: u => u.Id == userId,
-                include: users => users.Include(u => u.PushSubscriptions));
-            
-            await _emailSender.SendEmailAsync()*/
-            
-            throw new NotImplementedException();
-        }
     }
 }

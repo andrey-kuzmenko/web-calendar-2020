@@ -26,11 +26,6 @@ namespace WebCalendar.DependencyResolver
     {
         public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            var emailConfig = configuration
-                .GetSection("EmailConfiguration")
-                .Get<EmailConfiguration>();
-            services.AddSingleton(emailConfig);
-            
             string connection = configuration["ConnectionString"];
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -63,16 +58,20 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSingleton<IMapper, WebCalendarAutoMapper>();
-
-            services.AddScoped<IPushNotificationSender, PushNotificationSender>();
             
-            var vapidDetails = configuration
+            var firebaseNotification = configuration
                 .GetSection("FirebaseNotification")
                 .Get<FirebaseNotification>();
+            
+            services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
+                new PushNotificationSender(firebaseNotification));
+            
+            var emailConfig = configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
 
-            services.AddSingleton(vapidDetails);
-
-            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>();
+            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
+                new EmailSender.Implementation.EmailSender(emailConfig));
         }
     }
 }
