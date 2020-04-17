@@ -11,11 +11,11 @@ namespace WebCalendar.WebApi.Controllers
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class EmailNotificationController : ControllerBase
+    public class NotificationController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public EmailNotificationController(IUserService userService)
+        public NotificationController(IUserService userService)
         {
             _userService = userService;
         }
