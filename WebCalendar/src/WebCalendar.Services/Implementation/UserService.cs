@@ -190,7 +190,7 @@ namespace WebCalendar.Services.Implementation
             await _uow.SaveChangesAsync();
         }
 
-        public async Task SendNotificationAsync(Guid userId, INotificableServiceModel notificableServiceModel, 
+        public async Task SendNotificationAsync(Guid userId, INotificable notificableEnity, 
             Notification type)
         {
             User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
