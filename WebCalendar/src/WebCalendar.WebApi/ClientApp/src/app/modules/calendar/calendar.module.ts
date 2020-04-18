@@ -7,7 +7,11 @@ import { MainComponent } from './pages/main/main.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import {PushNotificationComponent} from "./components/push-notification/push-notification.component";
 import { EmailNotificationComponent } from './components/email-notification/email-notification.component';
-import { AddEventModalComponent } from './components/add-event-modal/add-event-modal.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { DatepickerPopupComponent } from './components/datepicker-popup/datepicker-popup.component';
+import {FormsModule} from "@angular/forms";
+import { TimepickerComponent } from './components/timepicker/timepicker.component';
+import {ActivityModalComponent} from "./components/activity-modal/activity-modal.component";
 
 
 
@@ -18,12 +22,16 @@ import { AddEventModalComponent } from './components/add-event-modal/add-event-m
         MainComponent,
         SettingsComponent,
         EmailNotificationComponent,
-        AddEventModalComponent
+        ActivityModalComponent,
+        DatepickerPopupComponent,
+        TimepickerComponent
     ],
   imports: [
     CommonModule,
     CalendarRoutingModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgbModule,
+    FormsModule
   ]
 })
 export class CalendarModule { }

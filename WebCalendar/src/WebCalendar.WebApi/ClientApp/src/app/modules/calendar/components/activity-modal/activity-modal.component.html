@@ -1,0 +1,51 @@
+<!--<div class="modal-header">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>-->
+<div class="modal-body">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Title">
+  </div>
+  <ngb-tabset type="pills">
+
+    <ngb-tab title="Task">
+      <ng-template ngbTabContent>
+        <br>
+        <div class="form-group">
+          <textarea class="form-control" placeholder="Description" rows="2"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <app-datepicker-popup></app-datepicker-popup>
+          </div>
+          <div class="col">
+            <app-timepicker class="float-right"></app-timepicker>
+          </div>
+
+        </div>
+
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Event">
+      <ng-template ngbTabContent>
+        <br>
+        <p>Event Content.</p>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab title="Reminder">
+      <ng-template ngbTabContent>
+        <br>
+        <p>Reminder Content.</p>
+      </ng-template>
+    </ngb-tab>
+
+  </ngb-tabset>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+  <button type="button" class="btn btn-primary">Save</button>
+</div>

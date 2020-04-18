@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PushNotificationService} from "../../../../core/service/push-notification.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AddEventModalComponent} from "../../components/add-event-modal/add-event-modal.component";
+import {ActivityModalComponent} from "../../components/activity-modal/activity-modal.component";
 
 @Component({
   selector: 'app-main',
@@ -21,6 +21,6 @@ export class MainComponent implements OnInit {
   }
 
   openAddEventModal() {
-    this.modalService.open(AddEventModalComponent);
+    this.modalService.open(ActivityModalComponent);
   }
 }
