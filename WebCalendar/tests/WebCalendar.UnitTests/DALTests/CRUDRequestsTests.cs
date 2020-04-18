@@ -21,9 +21,9 @@ namespace WebCalendar.UnitTests.DALTests
 
             List<Calendar> calendarsSeed = new List<Calendar>
             {
-                new Calendar { Name = "calendar 1" },
-                new Calendar { Name = "calendar 2" },
-                new Calendar { Name = "calendar 3" }
+                new Calendar { Title = "calendar 1" },
+                new Calendar { Title = "calendar 2" },
+                new Calendar { Title = "calendar 3" }
             };
             // Insert seed data into the database using one instance of the context
             using (var context = new ApplicationDbContext(options))
@@ -59,7 +59,7 @@ namespace WebCalendar.UnitTests.DALTests
 
                 List<Calendar> calendars = context.Calendars.ToList();
 
-                await calendarRepository.AddAsync(new Calendar { Name = "calendar 4" });
+                await calendarRepository.AddAsync(new Calendar { Title = "calendar 4" });
                 await calendarRepository.SaveAsync();
 
                 List<Calendar> updatedCalendars = context.Calendars.ToList();
@@ -86,12 +86,12 @@ namespace WebCalendar.UnitTests.DALTests
                 EFRepositoryAsync<Calendar> calendarRepository =
                     new EFRepositoryAsync<Calendar>(context);
 
-                await calendarRepository.AddAsync(new Calendar { Name = CALENDAR_NAME });
+                await calendarRepository.AddAsync(new Calendar { Title = CALENDAR_NAME });
                 await calendarRepository.SaveAsync();
 
                 List<Calendar> calendars = context.Calendars.ToList();
 
-                Calendar calendarToDelete = calendars.First(c => c.Name == CALENDAR_NAME);
+                Calendar calendarToDelete = calendars.First(c => c.Title == CALENDAR_NAME);
 
                 calendarRepository.Remove(calendarToDelete);
                 await calendarRepository.SaveAsync();
@@ -120,14 +120,14 @@ namespace WebCalendar.UnitTests.DALTests
                 EFRepositoryAsync<Calendar> calendarRepository =
                     new EFRepositoryAsync<Calendar>(context);
 
-                await calendarRepository.AddAsync(new Calendar { Name = CALENDAR_TO_UPDATE_NAME });
+                await calendarRepository.AddAsync(new Calendar { Title = CALENDAR_TO_UPDATE_NAME });
                 await calendarRepository.SaveAsync();
 
                 List<Calendar> calendars = context.Calendars.ToList();
 
                 Calendar calendarToUpdate = calendars
-                    .First(c => c.Name == CALENDAR_TO_UPDATE_NAME);
-                calendarToUpdate.Name = UPDATED_CALENDAR_NAME;
+                    .First(c => c.Title == CALENDAR_TO_UPDATE_NAME);
+                calendarToUpdate.Title = UPDATED_CALENDAR_NAME;
                 HashSet<Calendar> expectedCalendars = calendars.ToHashSet();
 
                 calendarRepository.Update(calendarToUpdate);
