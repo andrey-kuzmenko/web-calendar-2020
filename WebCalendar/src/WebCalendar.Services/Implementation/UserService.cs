@@ -86,7 +86,11 @@ namespace WebCalendar.Services.Implementation
         public async Task<IdentityResult> RegisterAsync(UserRegisterServiceModel userRegisterServiceModel)
         {
             User user = _mapper.Map<UserRegisterServiceModel, User>(userRegisterServiceModel);
+            
+            user.Calendars.Add(new Calendar());
+            
             IdentityResult result = await _userManager.CreateAsync(user, userRegisterServiceModel.Password);
+            
             return result;
         }
 

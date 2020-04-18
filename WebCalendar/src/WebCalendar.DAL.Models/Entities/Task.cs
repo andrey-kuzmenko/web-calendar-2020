@@ -10,7 +10,7 @@ namespace WebCalendar.DAL.Models.Entities
 
         public bool IsDeleted { get; set; }
 
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public bool IsDone { get; set; }
