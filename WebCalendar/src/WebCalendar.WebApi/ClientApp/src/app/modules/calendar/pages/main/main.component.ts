@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PushNotificationService} from "../../../../core/service/push-notification.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {AddEventModalComponent} from "../../components/add-event-modal/add-event-modal.component";
 
 @Component({
   selector: 'app-main',
@@ -8,12 +10,17 @@ import {PushNotificationService} from "../../../../core/service/push-notificatio
 })
 export class MainComponent implements OnInit {
 
-  constructor(private pushNotificationService: PushNotificationService) {
+  constructor(private pushNotificationService: PushNotificationService,
+              private modalService: NgbModal) {
   }
 
   ngOnInit(): void {
       if(!this.pushNotificationService.isSubscribeInit()) {
         this.pushNotificationService.init();
       }
+  }
+
+  openAddEventModal() {
+    this.modalService.open(AddEventModalComponent);
   }
 }

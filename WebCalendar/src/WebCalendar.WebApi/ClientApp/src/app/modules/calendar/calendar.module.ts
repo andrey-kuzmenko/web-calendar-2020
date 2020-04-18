@@ -7,6 +7,7 @@ import { MainComponent } from './pages/main/main.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import {PushNotificationComponent} from "./components/push-notification/push-notification.component";
 import { EmailNotificationComponent } from './components/email-notification/email-notification.component';
+import { AddEventModalComponent } from './components/add-event-modal/add-event-modal.component';
 
 
 
@@ -16,7 +17,8 @@ import { EmailNotificationComponent } from './components/email-notification/emai
         PushNotificationComponent,
         MainComponent,
         SettingsComponent,
-        EmailNotificationComponent
+        EmailNotificationComponent,
+        AddEventModalComponent
     ],
   imports: [
     CommonModule,
