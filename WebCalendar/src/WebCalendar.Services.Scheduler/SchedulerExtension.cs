@@ -13,10 +13,10 @@ namespace WebCalendar.Services.Scheduler
     {
         public static async Task ScheduleEvent(this IScheduler scheduler, SchedulerEvent @event)
         {
-            if (@event.NotifyBeforeInterval != null)
+     /*       if (@event.NotifyBeforeInterval != null)
             {
                 await ScheduleEventInAdvance(scheduler, @event);
-            }
+            }*/
 
             JobKey jobKey = new JobKey(@event.Id.ToString(), ConstantsStorage.EVENT_GROUP);
             TriggerKey triggerKey = new TriggerKey(@event.Id.ToString(), ConstantsStorage.EVENT_GROUP);
@@ -29,7 +29,7 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
-                .WithCronSchedule(@event.CronExpression)
+                .WithCronSchedule(@event.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);
@@ -39,7 +39,7 @@ namespace WebCalendar.Services.Scheduler
         {
             JobKey jobKey = new JobKey(@event.Id.ToString(), ConstantsStorage.EVENT_GROUP);
 
-            await UnscheduleEventInAdvance(scheduler, @event);
+  //          await UnscheduleEventInAdvance(scheduler, @event);
             await scheduler.DeleteJob(jobKey);
         }
 
@@ -62,8 +62,7 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
-                .WithCronSchedule(reminder.CronExpression)
-                .EndAt(reminder.EndTime)
+                .WithCronSchedule(reminder.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);
@@ -114,7 +113,7 @@ namespace WebCalendar.Services.Scheduler
             await ScheduleTask(scheduler, task);
         }
 
-        private static async Task ScheduleEventInAdvance(this IScheduler scheduler, SchedulerEvent @event)
+    /*    private static async Task ScheduleEventInAdvance(this IScheduler scheduler, SchedulerEvent @event)
         {
             JobKey jobKey = new JobKey(@event.Id.ToString(), ConstantsStorage.ADVANCE_EVENT_GROUP);
             TriggerKey triggerKey = new TriggerKey(@event.Id.ToString(), ConstantsStorage.EVENT_GROUP);
@@ -139,6 +138,6 @@ namespace WebCalendar.Services.Scheduler
             JobKey jobKey = new JobKey(@event.Id.ToString(), ConstantsStorage.ADVANCE_EVENT_GROUP);
 
             await scheduler.DeleteJob(jobKey);
-        }
+        }*/
     }
 }

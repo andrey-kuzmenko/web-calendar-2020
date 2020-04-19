@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using WebCalendar.Common;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
@@ -18,6 +21,8 @@ using WebCalendar.Services.EmailSender.Implementation;
 using WebCalendar.Services.Implementation;
 using WebCalendar.Services.PushNotification.Contracts;
 using WebCalendar.Services.PushNotification.Implementation;
+using WebCalendar.Services.Scheduler.Contracts;
+using WebCalendar.Services.Scheduler.Implementation;
 using WebPush;
 using VapidDetails = WebCalendar.Services.PushNotification.VapidDetails;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WebCalendar.DAL.Models;
+using WebCalendar.DAL.Models.Entities;
 
 namespace WebCalendar.Services.Scheduler
 {
@@ -22,11 +23,6 @@ namespace WebCalendar.Services.Scheduler
             string years = GetYears(schedule);
 
             return $"{seconds} {minutes} {hours} {daysOfMounth} {mounthes} {daysOfWeek} {years}";
-        }
-
-        public static string GetCronExpressionInAdvance(this IRepeatableActivity schedule)
-        {
-            
         }
 
         private static string Separate(IEnumerable<int> items)

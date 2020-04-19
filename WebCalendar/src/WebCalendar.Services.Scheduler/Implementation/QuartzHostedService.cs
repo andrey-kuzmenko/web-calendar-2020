@@ -42,7 +42,6 @@ namespace WebCalendar.Services.Scheduler.Implementation
             Scheduler.JobFactory = _jobFactory;
 
             await Scheduler.Start(cancellationToken);
-
             //using (var scope = _scopeFactory.CreateScope())
             //{
             //    var dataLoader = scope.ServiceProvider.GetRequiredService<ISchedulerDataLoader>();
