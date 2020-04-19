@@ -5,6 +5,9 @@ using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
 using WebCalendar.Services.Contracts;
 using WebCalendar.Services.Models.Task;
+using WebCalendar.Services.Scheduler;
+using WebCalendar.Services.Scheduler.Contracts;
+using WebCalendar.Services.Scheduler.Models;
 
 namespace WebCalendar.Services.Implementation
 {
@@ -12,18 +15,20 @@ namespace WebCalendar.Services.Implementation
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
+        private readonly ISchedulerService _schedulerService;
 
-        public TaskService(IUnitOfWork uow, IMapper mapper)
+        public TaskService(IUnitOfWork uow, IMapper mapper, ISchedulerService schedulerService)
         {
             _uow = uow;
             _mapper = mapper;
+            _schedulerService = schedulerService;
         }
 
         public async Task<TaskServiceModel> AddAsync(TaskCreationServiceModel entity)
         {
             DAL.Models.Entities.Task task = _mapper.Map<TaskCreationServiceModel, DAL.Models.Entities.Task>(entity);
-            await _uow.GetRepository<DAL.Models.Entities.Task>().AddAsync(task);
-
+            Guid id = (await _uow.GetRepository<DAL.Models.Entities.Task>().AddAsync(task)).Id;
+            await _schedulerService.ScheduleTaskById(id);
             await _uow.SaveChangesAsync();
 
             TaskServiceModel taskServiceModel = _mapper.Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
@@ -59,6 +64,8 @@ namespace WebCalendar.Services.Implementation
                 .Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
 
             await RemoveAsync(taskServiceModel);
+
+            await _schedulerService.UnscheduleTaskById(id);
         }
 
         public async Task RemoveAsync(TaskServiceModel entity)
@@ -77,6 +84,8 @@ namespace WebCalendar.Services.Implementation
             _uow.GetRepository<DAL.Models.Entities.Task>().Update(task);
 
             await _uow.SaveChangesAsync();
+
+            await _schedulerService.RescheduleTaskById(entity.Id);
         }
     }
 }

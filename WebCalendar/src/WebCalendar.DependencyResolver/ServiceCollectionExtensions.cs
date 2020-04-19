@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Quartz;
+using Quartz.Impl;
+using Quartz.Spi;
 using WebCalendar.Common;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
@@ -19,6 +22,9 @@ using WebCalendar.Services.Implementation;
 using WebCalendar.PushNotification;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Implementation;
+using WebCalendar.Services.Scheduler.Contracts;
+using WebCalendar.Services.Scheduler.Implementation;
+using WebPush;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -71,8 +77,21 @@ namespace WebCalendar.DependencyResolver
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
 
+
             services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
                 new EmailSender.Implementation.EmailSender(emailConfig));
+
+            services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
+            services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
+                        services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
+            services.AddScoped<ISchedulerService, SchedulerService>();
+
+            services.AddSingleton<NotificationJob>();
+
         }
     }
 }

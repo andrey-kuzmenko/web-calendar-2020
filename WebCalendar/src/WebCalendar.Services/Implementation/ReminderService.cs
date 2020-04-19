@@ -6,6 +6,7 @@ using WebCalendar.DAL;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.Contracts;
 using WebCalendar.Services.Models.Reminder;
+using WebCalendar.Services.Scheduler.Contracts;
 using Task = System.Threading.Tasks.Task;
 
 namespace WebCalendar.Services.Implementation
@@ -14,11 +15,13 @@ namespace WebCalendar.Services.Implementation
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
+        private readonly ISchedulerService _schedulerService;
 
-        public ReminderService(IUnitOfWork uow, IMapper mapper)
+        public ReminderService(IUnitOfWork uow, IMapper mapper, ISchedulerService schedulerService)
         {
             _uow = uow;
             _mapper = mapper;
+            _schedulerService = schedulerService;
         }
 
         public async Task AddAsync(ReminderCreationServiceModel entity)
@@ -27,6 +30,8 @@ namespace WebCalendar.Services.Implementation
             await _uow.GetRepository<Reminder>().AddAsync(reminder);
 
             await _uow.SaveChangesAsync();
+
+            // await _schedulerService.ScheduleReminderById()
         }
 
         public async Task<IEnumerable<ReminderServiceModel>> GetAllAsync()
