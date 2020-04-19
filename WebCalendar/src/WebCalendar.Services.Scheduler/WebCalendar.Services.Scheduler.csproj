@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WebCalendar.Common\WebCalendar.Common.csproj" />
-    <ProjectReference Include="..\src\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
-    <ProjectReference Include="..\src\WebCalendar.DAL\WebCalendar.DAL.csproj" />
+    <ProjectReference Include="..\WebCalendar.Common\WebCalendar.Common.csproj" />
+    <ProjectReference Include="..\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
+    <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
   </ItemGroup>
 
 </Project>
