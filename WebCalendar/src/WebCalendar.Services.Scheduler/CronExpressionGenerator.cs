@@ -24,6 +24,11 @@ namespace WebCalendar.Services.Scheduler
             return $"{seconds} {minutes} {hours} {daysOfMounth} {mounthes} {daysOfWeek} {years}";
         }
 
+        public static string GetCronExpressionInAdvance(this IRepeatableActivity schedule)
+        {
+            
+        }
+
         private static string Separate(IEnumerable<int> items)
         {
             IEnumerable<string> stringsOfDays = items.Select(d => d.ToString());

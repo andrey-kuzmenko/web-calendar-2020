@@ -75,6 +75,15 @@ namespace WebCalendar.DependencyResolver
             services.AddSingleton(vapidDetails);
 
             services.AddScoped<IEmailSender, EmailSender>();
+
+            services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
+            services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
+                        services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
+            services.AddScoped<ISchedulerService, SchedulerService>();
+
+            services.AddSingleton<NotificationJob>();
         }
     }
 }
