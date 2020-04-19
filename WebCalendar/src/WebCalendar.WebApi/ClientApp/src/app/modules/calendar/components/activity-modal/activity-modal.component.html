@@ -1,0 +1,65 @@
+<!--<div class="modal-header">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>-->
+<div class="modal-body">
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Title"
+           [(ngModel)]="taskContent.title">
+  </div>
+
+  <div>
+    <ul ngbNav #nav="ngbNav" [(activeId)]="activity" class="nav-pills" orientation="horizontal">
+      <li ngbNavItem="task">
+        <a ngbNavLink>Task</a>
+        <ng-template ngbNavContent>
+          <br>
+          <div class="form-group">
+            <textarea class="form-control" placeholder="Description" rows="2"
+                      [(ngModel)]="taskContent.description"></textarea>
+          </div>
+
+          <div class="form-group row">
+            <div class="col">
+              <app-datepicker-popup (dateEmitter)="setTaskDate($event)"></app-datepicker-popup>
+            </div>
+            <div class="col">
+              <app-timepicker class="float-right" (timeEmitter)="setTaskTime($event)"></app-timepicker>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <select class="form-control" required [(ngModel)]="taskContent.calendarId">
+              <option value="" disabled selected hidden>Choose calendar...</option>
+              <option [value]="calendar.id" *ngFor="let calendar of userCalendars">{{calendar.title}}</option>
+            </select>
+          </div>
+        </ng-template>
+      </li>
+      <li ngbNavItem="event">
+        <a ngbNavLink>Event</a>
+        <ng-template ngbNavContent>
+          <br>
+          <p>Event Content.</p>
+        </ng-template>
+      </li>
+      <li ngbNavItem="reminder">
+        <a ngbNavLink>Reminder</a>
+        <ng-template ngbNavContent>
+          <br>
+          <p>Reminder Content.</p>
+        </ng-template>
+      </li>
+    </ul>
+
+    <div [ngbNavOutlet]="nav"></div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+  <button type="button" class="btn btn-primary"
+          (click)="save()"
+  >Save
+  </button>
+</div>

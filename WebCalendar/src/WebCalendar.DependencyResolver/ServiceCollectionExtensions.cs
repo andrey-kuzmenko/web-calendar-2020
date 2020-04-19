@@ -15,16 +15,16 @@ using WebCalendar.DAL.Models.Entities;
 using WebCalendar.DAL.Repositories.Contracts;
 using WebCalendar.DAL.Repositories.Implementation;
 using WebCalendar.Services.Contracts;
-using WebCalendar.Services.EmailSender;
-using WebCalendar.Services.EmailSender.Contracts;
-using WebCalendar.Services.EmailSender.Implementation;
+using WebCalendar.EmailSender;
+using WebCalendar.EmailSender.Contracts;
+using WebCalendar.EmailSender.Implementation;
 using WebCalendar.Services.Implementation;
-using WebCalendar.Services.PushNotification.Contracts;
-using WebCalendar.Services.PushNotification.Implementation;
+using WebCalendar.PushNotification;
+using WebCalendar.PushNotification.Contracts;
+using WebCalendar.PushNotification.Implementation;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Implementation;
 using WebPush;
-using VapidDetails = WebCalendar.Services.PushNotification.VapidDetails;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -32,11 +32,6 @@ namespace WebCalendar.DependencyResolver
     {
         public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            var emailConfig = configuration
-                .GetSection("EmailConfiguration")
-                .Get<EmailConfiguration>();
-            services.AddSingleton(emailConfig);
-            
             string connection = configuration["ConnectionString"];
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -65,19 +60,26 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IReminderService, ReminderService>();
             services.AddScoped<ITaskService, TaskService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSingleton<IMapper, WebCalendarAutoMapper>();
-
-            services.AddScoped<WebPushClient>();
-            services.AddScoped<IPushNotificationService, PushNotificationService>();
             
-            var vapidDetails = configuration
-                .GetSection("VapidDetails")
-                .Get<VapidDetails>();
+            var firebaseNotification = configuration
+                .GetSection("FirebaseNotification")
+                .Get<FirebaseNotification>();
+            
+            services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
+                new PushNotificationSender(firebaseNotification));
+            
+            var emailConfig = configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
 
-            services.AddSingleton(vapidDetails);
+
+            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
+                new EmailSender.Implementation.EmailSender(emailConfig));
 
             services.AddScoped<IEmailSender, EmailSender>();
 
@@ -89,6 +91,7 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<ISchedulerService, SchedulerService>();
 
             services.AddSingleton<NotificationJob>();
+
         }
     }
 }

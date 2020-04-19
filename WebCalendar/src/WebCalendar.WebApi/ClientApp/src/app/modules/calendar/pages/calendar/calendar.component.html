@@ -1,10 +1,10 @@
-<app-notification></app-notification>
-<div style="height: 90vh">
+<div>
   <full-calendar #calendar
                  [plugins]="calendarPlugins"
                  [events]="calendarEvents"
-                 [height]="calendarSettings.height"
                  [firstDay]="calendarSettings.firstDay"
+                 [eventTimeFormat]="calendarSettings.eventTimeFormat"
+                 [slotLabelFormat]="calendarSettings.eventTimeFormat"
+                 (eventRender)="eventRender($event)"
   ></full-calendar>
 </div>
-<button class="btn btn-primary" (click)="logout()">Logout</button>

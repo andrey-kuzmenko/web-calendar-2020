@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DependencyResolver;
-using WebPush;
 
 namespace WebCalendar.WebApi
 {
@@ -45,10 +44,11 @@ namespace WebCalendar.WebApi
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(options =>
                 {
-                    options.SaveToken = true;
+                    options.SaveToken = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,

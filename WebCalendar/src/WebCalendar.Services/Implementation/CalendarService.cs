@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebCalendar.Common.Contracts;
@@ -77,6 +78,17 @@ namespace WebCalendar.Services.Implementation
             _uow.GetRepository<Calendar>().Update(calendar);
 
             await _uow.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<CalendarServiceModel>> GetAllUserCalendarsAsync(Guid userId)
+        {
+            IEnumerable<Calendar> calendars = await _uow.GetRepository<Calendar>()
+                .GetAllAsync(calendar => calendar.UserId == userId);
+
+            IEnumerable<CalendarServiceModel> userCalendars = _mapper
+                .Map<IEnumerable<Calendar>, IEnumerable<CalendarServiceModel>>(calendars);
+            
+            return userCalendars;
         }
 
         public async Task ShareToUser(Guid calendarId, Guid userId)

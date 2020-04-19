@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(".*[a-zA-Z].*")]]
     });
 
-    //this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/calendar';
   }
 
   get f() {
@@ -43,9 +43,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    // stop here if form is invalid
     if (this.loginForm.invalid) {
-      console.log(this.loginForm);
       return;
     }
 
@@ -54,17 +52,13 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password
     }
 
-    //this.loading = true;
     this._authenticationService.login(user.email, user.password)
       .pipe(first())
       .subscribe(
         data => {
-          //this._router.navigate([this.returnUrl]);
-          this._router.navigate(["calendar"]);
+          this._router.navigate([this.returnUrl]);
         },
         error => {
-          //this.error = error;
-          //this.loading = false;
         });
   }
 }

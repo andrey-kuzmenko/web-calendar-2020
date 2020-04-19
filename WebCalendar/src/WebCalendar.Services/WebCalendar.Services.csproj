@@ -8,6 +8,8 @@
       <ProjectReference Include="..\WebCalendar.Common\WebCalendar.Common.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
+      <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />
+      <ProjectReference Include="..\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj" />
       <ProjectReference Include="..\WebCalendar.Services.Scheduler\WebCalendar.Services.Scheduler.csproj" />
     </ItemGroup>
 

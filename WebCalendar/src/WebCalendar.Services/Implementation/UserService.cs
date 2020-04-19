@@ -8,8 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using WebCalendar.Common.Contracts;
+using WebCalendar.DAL;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.Contracts;
+using WebCalendar.Services.Models.Calendar;
 using WebCalendar.Services.Models.User;
 using Task = System.Threading.Tasks.Task;
 
@@ -21,14 +23,18 @@ namespace WebCalendar.Services.Implementation
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
+        private readonly IUnitOfWork _uow;
+        private readonly ICalendarService _calendarService;
 
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, 
-            IConfiguration config)
+            IConfiguration config, IUnitOfWork uow, ICalendarService calendarService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _config = config;
+            _uow = uow;
+            _calendarService = calendarService;
         }
 
         public Task<IEnumerable<UserServiceModel>> GetAllAsync()
@@ -45,9 +51,18 @@ namespace WebCalendar.Services.Implementation
             return userServiceModel;
         }
 
-        public Task UpdateAsync(UserEditionServiceModel entity)
+        public async Task UpdateAsync(UserServiceModel entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+            {
+                return;
+            }
+
+            User user = _mapper.Map<UserServiceModel, User>(entity);
+
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
         }
 
         public Task RemoveAsync(Guid id)
@@ -74,7 +89,17 @@ namespace WebCalendar.Services.Implementation
         public async Task<IdentityResult> RegisterAsync(UserRegisterServiceModel userRegisterServiceModel)
         {
             User user = _mapper.Map<UserRegisterServiceModel, User>(userRegisterServiceModel);
+
             IdentityResult result = await _userManager.CreateAsync(user, userRegisterServiceModel.Password);
+
+            //create default calendar
+            await _calendarService.AddAsync(new CalendarCreationServiceModel
+            {
+                Title = "Default",
+                Description = "",
+                UserId = user.Id
+            });
+
             return result;
         }
 
@@ -122,6 +147,66 @@ namespace WebCalendar.Services.Implementation
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();
+        }
+        
+        public async Task SubscribeOnEmailNotificationAsync(Guid userId)
+        {
+            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
+
+            user.IsSubscribedToEmailNotifications = true;
+
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task UnsubscribeFromEmailNotificationAsync(Guid userId)
+        {
+            User user = await _uow.GetRepository<User>().GetByIdAsync(userId);
+
+            user.IsSubscribedToEmailNotifications = false;
+
+            _uow.GetRepository<User>().Update(user);
+
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsSubscribeOnEmailNotificationAsync(Guid userId)
+        {
+            bool isSubscribe = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
+                selector: u => u.IsSubscribedToEmailNotifications,
+                predicate: u => u.Id == userId);
+
+            return isSubscribe;
+        }
+
+        public async Task SubscribeOnPushNotificationAsync(Guid userId, string token)
+        {
+            var pushSubscription = new PushSubscription
+            {
+                DeviceToken = token,
+                UserId = userId
+            };
+
+            await _uow.GetRepository<PushSubscription>().AddAsync(pushSubscription);
+
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task UnsubscribeFromPushNotificationAsync(Guid userId, string token)
+        {
+            IEnumerable<PushSubscription> pushSubscriptions = await _uow.GetRepository<PushSubscription>().GetAllAsync(
+                p => p.UserId == userId && p.DeviceToken == token);
+
+            foreach (PushSubscription pushSubscription in pushSubscriptions)
+            {
+                _uow.GetRepository<PushSubscription>().Remove(new PushSubscription
+                {
+                    Id = pushSubscription.Id
+                });
+            }
+
+            await _uow.SaveChangesAsync();
         }
     }
 }

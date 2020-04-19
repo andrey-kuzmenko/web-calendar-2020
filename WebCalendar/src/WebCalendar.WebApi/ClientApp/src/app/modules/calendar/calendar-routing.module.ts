@@ -1,11 +1,29 @@
 ﻿import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
-import {CalendarComponent} from "./pages/calendar/calendar.component";
+import {MainComponent} from "./pages/main/main.component";
+import {SettingsComponent} from "./pages/settings/settings.component";
 
 const routes: Routes = [
-  {
+  /*{
     path: '',
-    component: CalendarComponent
+    component: MainComponent
+  },
+  {
+    path: "settings",
+    component: SettingsComponent,
+  }*/
+  {
+    path: "",
+    children: [
+      {
+        path: "",
+        component: MainComponent
+      },
+      {
+        path: "settings",
+        component: SettingsComponent
+      }
+    ]
   }
 ];
 
