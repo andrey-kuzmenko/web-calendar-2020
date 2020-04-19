@@ -21,6 +21,8 @@ using WebCalendar.Services.Implementation;
 using WebCalendar.PushNotification;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Implementation;
+using WebCalendar.Services.Notification.Contracts;
+using WebCalendar.Services.Notification.Implementation;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Implementation;
 
@@ -58,7 +60,6 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IReminderService, ReminderService>();
             services.AddScoped<ITaskService, TaskService>();
-            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -68,16 +69,17 @@ namespace WebCalendar.DependencyResolver
                 .GetSection("FirebaseNotification")
                 .Get<FirebaseNotification>();
             
-            services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
+            services.AddSingleton<IPushNotificationSender, PushNotificationSender>(p =>
                 new PushNotificationSender(firebaseNotification));
             
             var emailConfig = configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
-
-
-            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
+            
+            services.AddSingleton<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
                 new EmailSender.Implementation.EmailSender(emailConfig));
+            
+            services.AddSingleton<INotificationService, NotificationService>();
 
 
             services.AddSingleton<IQuartzHostedService, QuartzHostedService>();

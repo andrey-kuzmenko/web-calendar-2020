@@ -1,6 +1,6 @@
-﻿namespace WebCalendar.Services.Models.Notification
+﻿namespace WebCalendar.Services.Notification.Models
 {
-    public enum Notification
+    public enum NotificationType
     {
         Create,
         Edit,

@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using WebCalendar.DAL.Models;
 using WebCalendar.EmailSender.Contracts;
 using WebCalendar.PushNotification.Contracts;
-using WebCalendar.PushNotification.Models;
-using WebCalendar.Services.Contracts;
+using WebCalendar.Services.Notification.Contracts;
+using WebCalendar.Services.Notification.Models;
 
-namespace WebCalendar.Services.Implementation
+namespace WebCalendar.Services.Notification.Implementation
 {
     public class NotificationService : INotificationService
     {
@@ -19,7 +19,7 @@ namespace WebCalendar.Services.Implementation
             _emailSender = emailSender;
         }
 
-        public async Task SendNotificationAsync(INotificable notificableEnity, Notification type)
+        public async Task SendNotificationAsync(INotificable notificableEnity, NotificationType type)
         {
             /*User user = await _uow.GetRepository<User>().GetFirstOrDefaultAsync(
                 predicate: u => u.Id == userId,
