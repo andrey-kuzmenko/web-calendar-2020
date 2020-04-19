@@ -10,7 +10,8 @@ import {
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../../core/service/authentication.service";
 import {FullCalendarComponent} from "@fullcalendar/angular";
-import dayGridPlugin from "@fullcalendar/daygrid";
+//import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from '@fullcalendar/timegrid';
 import {EventInput} from "@fullcalendar/core/structs/event";
 
 @Component({
@@ -22,7 +23,7 @@ export class CalendarComponent implements OnInit, AfterViewInit{
 
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
 
-  calendarPlugins = [dayGridPlugin];
+  calendarPlugins = [timeGridPlugin];
 
   calendarSettings = {
     height: "parent",
@@ -56,7 +57,7 @@ export class CalendarComponent implements OnInit, AfterViewInit{
   }
 
   eventRender($event: any) {
-    console.log($event);
-    $event.el.style.textDecoration = "line-through";
+    /*console.log($event);
+    $event.el.style.textDecoration = "line-through";*/
   }
 }
