@@ -1,10 +1,9 @@
 ﻿using System;
-using WebCalendar.DAL.Models;
 using WebCalendar.Services.Models.Calendar;
 
-namespace WebCalendar.Services.Models.Task
+namespace WebCalendar.WebApi.Models.Task
 {
-    public class TaskServiceModel : IActivity
+    public class TaskModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

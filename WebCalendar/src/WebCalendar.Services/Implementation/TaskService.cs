@@ -19,12 +19,16 @@ namespace WebCalendar.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task AddAsync(TaskCreationServiceModel entity)
+        public async Task<TaskServiceModel> AddAsync(TaskCreationServiceModel entity)
         {
             DAL.Models.Entities.Task task = _mapper.Map<TaskCreationServiceModel, DAL.Models.Entities.Task>(entity);
             await _uow.GetRepository<DAL.Models.Entities.Task>().AddAsync(task);
 
             await _uow.SaveChangesAsync();
+
+            TaskServiceModel taskServiceModel = _mapper.Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
+
+            return taskServiceModel;
         }
 
         public async Task<IEnumerable<TaskServiceModel>> GetAllAsync()

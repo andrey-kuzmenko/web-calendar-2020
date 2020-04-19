@@ -7,7 +7,7 @@ namespace WebCalendar.Services.Contracts
 {
     public interface ITaskService
     {
-        Task AddAsync(TaskCreationServiceModel entity);
+        Task<TaskServiceModel> AddAsync(TaskCreationServiceModel entity);
         Task<IEnumerable<TaskServiceModel>> GetAllAsync();
         Task<TaskServiceModel> GetByIdAsync(Guid id);
         Task RemoveAsync(Guid id);

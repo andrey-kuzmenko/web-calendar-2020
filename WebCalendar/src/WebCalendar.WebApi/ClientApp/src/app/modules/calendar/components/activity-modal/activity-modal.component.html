@@ -14,23 +14,27 @@
       <li ngbNavItem="task">
         <a ngbNavLink>Task</a>
         <ng-template ngbNavContent>
-            <br>
-            <div class="form-group">
+          <br>
+          <div class="form-group">
             <textarea class="form-control" placeholder="Description" rows="2"
-                    [(ngModel)]="taskContent.description"></textarea>
+                      [(ngModel)]="taskContent.description"></textarea>
+          </div>
+
+          <div class="form-group row">
+            <div class="col">
+              <app-datepicker-popup (dateEmitter)="setTaskDate($event)"></app-datepicker-popup>
             </div>
-
-            <div class="row">
-              <div class="col">
-                <app-datepicker-popup (dateEmitter)="setTaskDate($event)"></app-datepicker-popup>
-              </div>
-              <div class="col">
-                <app-timepicker class="float-right" (timeEmitter)="setTaskTime($event)"></app-timepicker>
-              </div>
-
-              *select calendar*
-
+            <div class="col">
+              <app-timepicker class="float-right" (timeEmitter)="setTaskTime($event)"></app-timepicker>
             </div>
+          </div>
+
+          <div class="form-group">
+            <select class="form-control" required [(ngModel)]="taskContent.calendarId">
+              <option value="" disabled selected hidden>Choose calendar...</option>
+              <option [value]="calendar.id" *ngFor="let calendar of userCalendars">{{calendar.title}}</option>
+            </select>
+          </div>
         </ng-template>
       </li>
       <li ngbNavItem="event">

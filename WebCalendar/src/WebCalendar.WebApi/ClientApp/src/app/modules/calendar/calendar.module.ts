@@ -9,10 +9,11 @@ import {PushNotificationComponent} from "./components/push-notification/push-not
 import { EmailNotificationComponent } from './components/email-notification/email-notification.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { DatepickerPopupComponent } from './components/datepicker-popup/datepicker-popup.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, NgControl, ReactiveFormsModule} from "@angular/forms";
 import { TimepickerComponent } from './components/timepicker/timepicker.component';
 import {ActivityModalComponent} from "./components/activity-modal/activity-modal.component";
 import {CalendarService} from "../../data/service/calendar.service";
+import {TaskService} from "../../data/service/task.service";
 
 
 
@@ -32,10 +33,12 @@ import {CalendarService} from "../../data/service/calendar.service";
     CalendarRoutingModule,
     FullCalendarModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers:[
-    CalendarService
+    CalendarService,
+    TaskService
   ]
 })
 export class CalendarModule { }

@@ -33,7 +33,7 @@ namespace WebCalendar.WebApi.Controllers
 
             await _userService.SubscribeOnEmailNotificationAsync(user.Id);
 
-            return Ok();
+            return NoContent();
         }
         
         //PUT: api/notification/email/unsubscribe/{userId}
@@ -49,7 +49,7 @@ namespace WebCalendar.WebApi.Controllers
 
             await _userService.UnsubscribeFromEmailNotificationAsync(user.Id);
 
-            return Ok();
+            return NoContent();
         }
         
         //PUT: api/notification/email/isSubscribe/{userId}

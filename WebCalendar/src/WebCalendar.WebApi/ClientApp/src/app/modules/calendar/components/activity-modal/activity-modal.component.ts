@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {Task} from "../../../../data/schema/task";
-import {Calendar} from "@fullcalendar/core";
+import {Calendar} from "../../../../data/schema/calendar";
+import {TaskService} from "../../../../data/service/task.service";
 
 @Component({
   selector: 'app-activity-modal',
@@ -15,15 +16,17 @@ export class ActivityModalComponent implements OnInit {
   taskContent: Task;
   activity = "task";
 
-  constructor(public activeModal: NgbActiveModal) {
+  constructor(
+    public activeModal: NgbActiveModal,
+    private taskService: TaskService) {
   }
 
   ngOnInit(): void {
     this.taskContent = {
       title: "",
       description: "",
-      date: new Date(),
-      calendarId: "calendarId"
+      startTime: new Date(),
+      calendarId: ""
     }
 
     console.log(this.userCalendars);
@@ -33,15 +36,20 @@ export class ActivityModalComponent implements OnInit {
     switch (this.activity) {
       case "task": {
         console.log(this.taskContent);
+        this.taskService.createTask(this.taskContent)
+          .subscribe(task => {
+            console.log(typeof task.startTime)
+            console.log(task);
+          });
       }
     }
   }
 
   setTaskDate($event: NgbDate) {
-    this.taskContent.date.setFullYear($event.year, $event.month - 1, $event.day);
+    this.taskContent.startTime.setFullYear($event.year, $event.month - 1, $event.day);
   }
 
   setTaskTime($event: { hour: number; minute: number }) {
-    this.taskContent.date.setHours($event.hour, $event.minute);
+    this.taskContent.startTime.setHours($event.hour, $event.minute);
   }
 }
