@@ -17,14 +17,12 @@ using WebCalendar.DAL.Repositories.Implementation;
 using WebCalendar.Services.Contracts;
 using WebCalendar.EmailSender;
 using WebCalendar.EmailSender.Contracts;
-using WebCalendar.EmailSender.Implementation;
 using WebCalendar.Services.Implementation;
 using WebCalendar.PushNotification;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Implementation;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Implementation;
-using WebPush;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -81,7 +79,6 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
                 new EmailSender.Implementation.EmailSender(emailConfig));
 
-            services.AddScoped<IEmailSender, EmailSender>();
 
             services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
             services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
