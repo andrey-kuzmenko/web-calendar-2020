@@ -36,4 +36,8 @@ export class AuthenticationService {
     this.router.navigate(["/login"]);
   }
 
+  public register(user: User): Observable<object>{
+    return this.http.post(`${environment.apiUrl}/user/register`, user);
+  }
+
 }

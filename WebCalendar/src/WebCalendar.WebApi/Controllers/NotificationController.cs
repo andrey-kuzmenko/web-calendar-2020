@@ -9,8 +9,8 @@ using WebCalendar.WebApi.Models;
 namespace WebCalendar.WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
+    [Authorize]
     public class NotificationController : ControllerBase
     {
         private readonly IUserService _userService;

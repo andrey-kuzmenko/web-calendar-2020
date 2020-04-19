@@ -15,5 +15,7 @@ namespace WebCalendar.Services.Contracts
         Task ShareToUser(Guid calendarId, Guid userId);
         Task UnshareToUser(Guid calendarId, Guid userId);
         Task UpdateAsync(CalendarEditionServiceModel entity);
+
+        Task<IEnumerable<CalendarServiceModel>> GetAllUserCalendarsAsync(Guid userId);
     }
 }

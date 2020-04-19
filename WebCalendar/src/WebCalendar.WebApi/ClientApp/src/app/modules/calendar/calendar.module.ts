@@ -12,6 +12,7 @@ import { DatepickerPopupComponent } from './components/datepicker-popup/datepick
 import {FormsModule} from "@angular/forms";
 import { TimepickerComponent } from './components/timepicker/timepicker.component';
 import {ActivityModalComponent} from "./components/activity-modal/activity-modal.component";
+import {CalendarService} from "../../data/service/calendar.service";
 
 
 
@@ -32,6 +33,9 @@ import {ActivityModalComponent} from "./components/activity-modal/activity-modal
     FullCalendarModule,
     NgbModule,
     FormsModule
+  ],
+  providers:[
+    CalendarService
   ]
 })
 export class CalendarModule { }

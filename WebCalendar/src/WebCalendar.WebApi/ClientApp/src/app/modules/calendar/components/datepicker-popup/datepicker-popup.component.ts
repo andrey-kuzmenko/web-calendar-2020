@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -6,11 +6,24 @@ import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './datepicker-popup.component.html',
   styleUrls: ['./datepicker-popup.component.scss']
 })
-export class DatepickerPopupComponent{
+export class DatepickerPopupComponent implements OnInit{
+
+  @Output() dateEmitter: EventEmitter<NgbDate>;
 
   date: NgbDate;
 
+
   constructor(private calendar: NgbCalendar) {
-    this.date = calendar.getToday();
+    this.dateEmitter = new EventEmitter<NgbDate>();
   }
+
+  onModelChange() {
+    this.dateEmitter.emit(this.date);
+  }
+
+  ngOnInit(): void {
+    this.date = this.calendar.getToday();
+    this.dateEmitter.emit(this.date);
+  }
+
 }

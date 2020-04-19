@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {UserService} from "../../../../data/service/user.service";
 import {User} from "../../../../data/schema/user";
+import {AuthenticationService} from "../../../../core/service/authentication.service";
 
 @Component({
   selector: 'app-registration',
@@ -19,14 +20,14 @@ export class RegistrationComponent implements OnInit {
   };
 
   constructor(
-    private _formBuilder: FormBuilder,
-    private _router: Router,
-    private _userService: UserService
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authenticationService: AuthenticationService
   ) {
   }
 
   ngOnInit() {
-    this.registerForm = this._formBuilder.group({
+    this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -63,8 +64,8 @@ export class RegistrationComponent implements OnInit {
       password: this.registerForm.value.password
     }
 
-    this._userService.registerUser(user).subscribe(response => {
-        this._router.navigate(["/login"]);
+    this.authenticationService.register(user).subscribe(response => {
+        this.router.navigate(["/login"]);
       },
       response => {
         console.log(response.error);

@@ -11,6 +11,7 @@ using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.Contracts;
+using WebCalendar.Services.Models.Calendar;
 using WebCalendar.Services.Models.User;
 using Task = System.Threading.Tasks.Task;
 
@@ -23,15 +24,17 @@ namespace WebCalendar.Services.Implementation
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _config;
         private readonly IUnitOfWork _uow;
+        private readonly ICalendarService _calendarService;
 
         public UserService(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, 
-            IConfiguration config, IUnitOfWork uow)
+            IConfiguration config, IUnitOfWork uow, ICalendarService calendarService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
             _config = config;
             _uow = uow;
+            _calendarService = calendarService;
         }
 
         public Task<IEnumerable<UserServiceModel>> GetAllAsync()
@@ -86,11 +89,17 @@ namespace WebCalendar.Services.Implementation
         public async Task<IdentityResult> RegisterAsync(UserRegisterServiceModel userRegisterServiceModel)
         {
             User user = _mapper.Map<UserRegisterServiceModel, User>(userRegisterServiceModel);
-            
-            user.Calendars.Add(new Calendar());
-            
+
             IdentityResult result = await _userManager.CreateAsync(user, userRegisterServiceModel.Password);
-            
+
+            //create default calendar
+            await _calendarService.AddAsync(new CalendarCreationServiceModel
+            {
+                Title = "Default",
+                Description = "",
+                UserId = user.Id
+            });
+
             return result;
         }
 
