@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
-using PandaHR.Api.Common.Exceptions;
+using WebCalendar.Common.Exceptions;
 using System;
 using System.Net;
 using Microsoft.Extensions.Logging;
@@ -58,7 +58,7 @@ namespace PandaHR.Api.Filters
                 switch (tryParseResult)
                 {
                     case ExceptionTypes.SchedulerException:
-                        return HttpStatusCode.ImATeapot;
+                        return HttpStatusCode.BadRequest;
 
                     case ExceptionTypes.NullReferenceException:
                         return HttpStatusCode.LengthRequired;
