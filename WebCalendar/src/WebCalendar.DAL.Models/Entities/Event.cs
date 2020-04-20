@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Event : IEntity, IRepeatableActivity, ISoftDeletable, INotificable
+    public class Event : IEntity, IRepeatableActivity, ISoftDeletable
     {
         public Event()
         {
