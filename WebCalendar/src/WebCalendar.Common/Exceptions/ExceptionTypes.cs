@@ -23,6 +23,7 @@ namespace WebCalendar.Common.Exceptions
         SqlException = 15,
         IndexOutOfRangeException = 16,
         IOException = 17,
+        SchedulerException = 18
     }
 }
 
