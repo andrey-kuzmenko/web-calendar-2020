@@ -23,7 +23,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(@event))
+                .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
                 .Build();
 
@@ -56,7 +56,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(reminder))
+                .UsingJobData(NotificationJob.JobDataKey, reminder.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.REMINDER)
                 .Build();
 
@@ -88,7 +88,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(task))
+                .UsingJobData(NotificationJob.JobDataKey, task.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.TASK)
                 .Build();
 
