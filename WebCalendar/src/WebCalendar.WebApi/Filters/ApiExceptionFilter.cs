@@ -20,7 +20,7 @@ namespace PandaHR.Api.Filters
         public void OnException(ExceptionContext context)
         {
             HttpStatusCode? statusCode = ((context?.Exception as WebException)?.Response as HttpWebResponse)?.StatusCode
-                   ?? getErrorCode(context.Exception.GetType());
+                   ?? GetErrorCode(context.Exception.GetType());
 
             string errorMessage = context.Exception.Message;
             string customErrorMessage = "Error";
@@ -50,7 +50,7 @@ namespace PandaHR.Api.Filters
             response.WriteAsync(result);
         }
 
-        private HttpStatusCode getErrorCode(Type exceptionType)
+        private HttpStatusCode GetErrorCode(Type exceptionType)
         {
             ExceptionTypes tryParseResult;
             if (Enum.TryParse<ExceptionTypes>(exceptionType.Name, out tryParseResult))
@@ -58,7 +58,7 @@ namespace PandaHR.Api.Filters
                 switch (tryParseResult)
                 {
                     case ExceptionTypes.SchedulerException:
-                        return HttpStatusCode.BadRequest;
+                        return HttpStatusCode.OK;
 
                     case ExceptionTypes.NullReferenceException:
                         return HttpStatusCode.LengthRequired;
