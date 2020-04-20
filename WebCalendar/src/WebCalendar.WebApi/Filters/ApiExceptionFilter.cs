@@ -6,7 +6,7 @@ using System;
 using System.Net;
 using Microsoft.Extensions.Logging;
 
-namespace PandaHR.Api.Filters
+namespace WebCalendar.WebApi.Filters
 {
     public class ApiExceptionFilter : IExceptionFilter
     {
@@ -39,12 +39,8 @@ namespace PandaHR.Api.Filters
                     errorCode = statusCode,
                     model = string.Empty
                 });
-
-            #region Logging  
             
-            _logger.LogError(context.Exception,"We caught an error");
-
-            #endregion Logging
+            _logger.LogError(context.Exception, "An error has occurred");
 
             response.ContentLength = result.Length;
             response.WriteAsync(result);

@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DependencyResolver;
+using WebCalendar.WebApi.Filters;
 
 namespace WebCalendar.WebApi
 {
@@ -38,7 +39,7 @@ namespace WebCalendar.WebApi
                     });
             });
 
-            services.AddControllers();
+            services.AddControllers(config => config.Filters.Add(typeof(ApiExceptionFilter)));
             
             services.AddAuthentication(options =>
                 {
@@ -118,18 +119,18 @@ namespace WebCalendar.WebApi
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }
