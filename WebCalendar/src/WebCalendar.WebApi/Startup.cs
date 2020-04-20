@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DependencyResolver;
 using WebCalendar.WebApi.Filters;
+using WebCalendar.WebApi.Middleware;
 
 namespace WebCalendar.WebApi
 {
@@ -105,6 +106,7 @@ namespace WebCalendar.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware(typeof(LogHttpContextMiddleware));
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
