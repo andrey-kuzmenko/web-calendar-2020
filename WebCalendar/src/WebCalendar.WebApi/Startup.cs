@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DependencyResolver;
+using WebCalendar.WebApi.Filters;
+using WebCalendar.WebApi.Middleware;
 
 namespace WebCalendar.WebApi
 {
@@ -38,7 +40,7 @@ namespace WebCalendar.WebApi
                     });
             });
 
-            services.AddControllers();
+            services.AddControllers(config => config.Filters.Add(typeof(ApiExceptionFilter)));
             
             services.AddAuthentication(options =>
                 {
@@ -104,6 +106,7 @@ namespace WebCalendar.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseMiddleware(typeof(LogHttpContextMiddleware));
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
