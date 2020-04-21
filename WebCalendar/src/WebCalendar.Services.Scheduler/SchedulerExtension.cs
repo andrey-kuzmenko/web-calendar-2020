@@ -94,7 +94,7 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
-                .StartAt(task.StartTime)
+                .StartAt(DateTime.SpecifyKind(task.StartTime, DateTimeKind.Utc))
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);

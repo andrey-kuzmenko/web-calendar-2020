@@ -43,11 +43,11 @@ namespace WebCalendar.Services.Scheduler.Implementation
                     _logger.LogInformation("job done");
                     string value = jobDataMap.GetString(JobDataKey);
                     var task = JsonConvert.DeserializeObject<SchedulerTask>(value);
-                    /*using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+                    using (IServiceScope scope = _serviceScopeFactory.CreateScope())
                     {
                         var notificationService = scope.ServiceProvider.GetService<INotificationService>();
-                        await notificationService.SendTaskNotificationAsync(new Guid(activityId), NotificationType.Start);
-                    }*/
+                        await notificationService.SendTaskNotificationAsync(task.Id, NotificationType.Start);
+                    }
                     
                     break;
                 }
