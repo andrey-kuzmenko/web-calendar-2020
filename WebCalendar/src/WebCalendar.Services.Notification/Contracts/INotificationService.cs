@@ -7,6 +7,6 @@ namespace WebCalendar.Services.Notification.Contracts
 {
     public interface INotificationService
     {
-        Task SendTaskNotificationAsync(Guid taskId, NotificationType type);
+        Task SendTaskNotificationAsync(TaskNotificationServiceModel task, NotificationType type);
     }
 }

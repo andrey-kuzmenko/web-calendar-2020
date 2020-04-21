@@ -1,5 +1,6 @@
 ﻿using WebCalendar.Common;
 using WebCalendar.DAL.Models.Entities;
+using WebCalendar.Services.Notification.Models;
 using WebCalendar.Services.Scheduler.Models;
 
 namespace WebCalendar.Services.Scheduler.Mapper
@@ -9,6 +10,8 @@ namespace WebCalendar.Services.Scheduler.Mapper
         public SchedulerPushSubscriptionProfile()
         {
             CreateMap<PushSubscription, SchedulerPushSubscription>();
+
+            CreateMap<SchedulerPushSubscription, PushSubscriptionNotificationServiceModel>();
         }
     }
 }

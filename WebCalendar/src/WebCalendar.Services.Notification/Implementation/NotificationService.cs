@@ -45,24 +45,11 @@ namespace WebCalendar.Services.Notification.Implementation
             
             throw new NotImplementedException();
         }*/
-        public async Task SendTaskNotificationAsync(Guid taskId, NotificationType type)
+        public async Task SendTaskNotificationAsync(TaskNotificationServiceModel task, NotificationType type)
         {
-            DAL.Models.Entities.Task task = await _uow.GetRepository<DAL.Models.Entities.Task>().GetFirstOrDefaultAsync(
-                predicate: t => t.Id == taskId);
-            
-            Calendar calendar = await _uow.GetRepository<Calendar>().GetFirstOrDefaultAsync(
-                predicate: c => c.Id == task.CalendarId,
-                include: calendars => calendars
-                    .Include(c => c.User)
-                    .Include(c=> c.CalendarUsers)
-                        .ThenInclude(cu => cu.User));
+            //IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
 
-            List<User> usersForNotify = calendar.CalendarUsers.Select(cu => cu.User).ToList();
-            usersForNotify.Add(calendar.User);
-
-            IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
-
-            IEnumerable<string> deviceTokens = usersForNotify
+            IEnumerable<string> deviceTokens = task.Users
                 .SelectMany(u => u.PushSubscriptions)
                 .Select(p => p.DeviceToken);
 
@@ -73,7 +60,7 @@ namespace WebCalendar.Services.Notification.Implementation
                     var pushNotificationServiceModel = new PushNotificationServiceModel
                     {
                         Title = task.Title,
-                        Message = "It's time to start the task",
+                        Message = "Time to start doing task",
                         Url = "" //url to page with details
                     };
                     

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -84,7 +85,7 @@ namespace WebCalendar.DependencyResolver
             services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
             services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
                         services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>(s => new StdSchedulerFactory(new NameValueCollection()));
             services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
             services.AddScoped<ISchedulerService, SchedulerService>();
 
