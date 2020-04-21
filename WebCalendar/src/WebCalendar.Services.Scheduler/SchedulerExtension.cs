@@ -52,7 +52,7 @@ namespace WebCalendar.Services.Scheduler
         public static async Task ScheduleReminder(this IScheduler scheduler, SchedulerReminder reminder)
         {
             JobKey jobKey = new JobKey(reminder.Id.ToString(), ConstantsStorage.REMINDER_GROUP);
-            TriggerKey triggerKey = new TriggerKey(reminder.Id.ToString(), ConstantsStorage.REMINDER_GROUP);
+            TriggerKey triggerKey = new TriggerKey(reminder.Id.ToString(, ConstantsStorage.REMINDER_GROUP);
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
