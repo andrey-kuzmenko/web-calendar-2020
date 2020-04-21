@@ -56,7 +56,8 @@ namespace WebCalendar.Services.Scheduler.Implementation
                 .Include(e => e.Calendar)
                     .ThenInclude(c => c.CalendarUsers)
                 .Include(e => e.Calendar)
-                    .ThenInclude(c => c.User));
+                    .ThenInclude(c => c.User)
+                        .ThenInclude(u => u.PushSubscriptions));
             IEnumerable<SchedulerTask> schedulerTasks = _mapper.Map<IEnumerable<DAL.Models.Entities.Task>, IEnumerable<SchedulerTask>>(tasks);
 
             return schedulerTasks;

@@ -29,27 +29,26 @@ namespace WebCalendar.Services.Scheduler.Implementation
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             JobDataMap jobDataMap = context.JobDetail.JobDataMap;
-
-            string value = jobDataMap.GetString(JobDataKey);
+            
             string activityType = jobDataMap.GetString(JobActivityTypeKey);
-
-            //var schedulerActivity = JsonConvert.DeserializeObject<SchedulerActivity>(value);
-
-            _logger.LogInformation("job doing");
+            
             
             switch (activityType)
             {
                 case ConstantsStorage.TASK:
                 {
                     _logger.LogInformation("job done");
-                    using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                    string value = jobDataMap.GetString(JobDataKey);
+                    var task = JsonConvert.DeserializeObject<SchedulerTask>(value);
+                    /*using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+                    {
+                        var notificationService = scope.ServiceProvider.GetService<INotificationService>();
+                        await notificationService.SendTaskNotificationAsync(new Guid(activityId), NotificationType.Start);
+                    }*/
                     
-                    var notificationService = scope.ServiceProvider.GetService<INotificationService>();
-                        
-                    //notificationService.SendTaskNotificationAsync(schedulerActivity.Id, NotificationType.Start);
                     break;
                 }
 
@@ -63,9 +62,6 @@ namespace WebCalendar.Services.Scheduler.Implementation
                     break;
                 }
             }
-            
-
-            return Task.CompletedTask;
         }
     }
 }

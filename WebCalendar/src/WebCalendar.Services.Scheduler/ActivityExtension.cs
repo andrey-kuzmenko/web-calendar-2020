@@ -29,12 +29,12 @@ namespace WebCalendar.Services.Scheduler
             return users;
         }
 
-        public static IEnumerable<User> GetUsers(this Task reminder)
+        public static IEnumerable<User> GetUsers(this Task task)
         {
             List<User> users = new List<User>();
 
-            users.Add(reminder.Calendar.User);
-            users.AddRange(reminder.Calendar.CalendarUsers.Select(cu => cu.User));
+            users.Add(task.Calendar.User);
+            users.AddRange(task.Calendar.CalendarUsers.Select(cu => cu.User));
 
             return users;
         }

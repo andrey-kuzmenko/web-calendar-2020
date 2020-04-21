@@ -7,5 +7,7 @@ namespace WebCalendar.Services.Scheduler.Models
     public class SchedulerUser
     {
         public Guid Id { get; set; }
+        public string Email { get; set; }
+        public ICollection<SchedulerPushSubscription> PushSubscriptions { get; set; }
     }
 }

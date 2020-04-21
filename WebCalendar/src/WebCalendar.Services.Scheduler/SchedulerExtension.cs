@@ -23,7 +23,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
+                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(@event))
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
                 .Build();
 
@@ -56,7 +56,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, reminder.Id.ToString())
+                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(reminder))
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.REMINDER)
                 .Build();
 
@@ -88,13 +88,13 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, task.Id.ToString())
+                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(task))
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.TASK)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
-                .StartAt(DateTime.SpecifyKind(task.StartTime, DateTimeKind.Utc))
+                .StartAt(task.StartTime)
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);
