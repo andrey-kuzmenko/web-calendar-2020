@@ -14,7 +14,6 @@ namespace WebCalendar.DAL.Models.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
-        public int? RepetitionsCount { get; set; }
 
         public ISet<int> DaysOfWeek { get; set; }
         public ISet<int> DaysOfMounth { get; set; }
