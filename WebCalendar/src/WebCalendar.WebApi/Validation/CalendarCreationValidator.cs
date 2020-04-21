@@ -7,7 +7,7 @@ using WebCalendar.Services.Models.Calendar;
 
 namespace WebCalendar.WebApi.Validation
 {
-    public class CalendarCreationValidator : AbstractValidator<CalendarCreationServiceModel>
+    public class CalendarCreationValidator
     {
     }
 }

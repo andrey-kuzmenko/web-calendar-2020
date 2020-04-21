@@ -9,5 +9,19 @@ namespace WebCalendar.WebApi.Validation
 {
     public class TaskCreationValidator : AbstractValidator<TaskCreationModel>
     {
+        private const int MIN_TITLE_LENGTH = 2;
+        private const int MAX_TITLE_LENGTH = 20;
+        private const int MAX_DESCRIPTION_LENGHT = 200;
+
+        TaskCreationValidator()
+        {
+            RuleFor(t => t.Title)
+                .NotEmpty()
+                .MinimumLength(MIN_TITLE_LENGTH)
+                .MaximumLength(MAX_TITLE_LENGTH);
+
+            RuleFor(t => t.Description)
+                .MaximumLength(MAX_DESCRIPTION_LENGHT);
+        }
     }
 }
