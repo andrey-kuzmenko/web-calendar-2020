@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using CorePush.Google;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Models;
@@ -15,13 +17,13 @@ namespace WebCalendar.PushNotification.Implementation
             _firebaseNotification = firebaseNotification;
         }
         
-        public async Task SendPushNotificationAsync(IEnumerable<string> deviceTokens,
-            Notification notification)
+        public async Task<bool> SendPushNotificationAsync(IEnumerable<string> deviceTokens,
+            Models.PushNotification notification)
         {
             using var fcm = new FcmSender(_firebaseNotification.ServerKey, _firebaseNotification.SenderId);
             foreach (string token in deviceTokens)
             {
-                await fcm.SendAsync(token, new
+                FcmResponse fcmResponse = await fcm.SendAsync(token, new
                 {
                     notification = new
                     {
@@ -30,7 +32,11 @@ namespace WebCalendar.PushNotification.Implementation
                         click_action = notification.Url
                     },
                 });
+                
+                Debugger.Log(0, null,fcmResponse.IsSuccess().ToString());
             }
+
+            return true;
         }
     }
 }

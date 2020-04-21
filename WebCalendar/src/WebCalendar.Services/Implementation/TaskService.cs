@@ -5,9 +5,8 @@ using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
 using WebCalendar.Services.Contracts;
 using WebCalendar.Services.Models.Task;
-using WebCalendar.Services.Scheduler;
-using WebCalendar.Services.Scheduler.Contracts;
-using WebCalendar.Services.Scheduler.Models;
+using WebCalendar.Services.Notification.Contracts;
+using WebCalendar.Services.Notification.Models;
 
 namespace WebCalendar.Services.Implementation
 {
@@ -15,13 +14,13 @@ namespace WebCalendar.Services.Implementation
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
-        private readonly ISchedulerService _schedulerService;
+        private readonly INotificationService _notificationService;
 
-        public TaskService(IUnitOfWork uow, IMapper mapper, ISchedulerService schedulerService)
+        public TaskService(IUnitOfWork uow, IMapper mapper, INotificationService notificationService)
         {
             _uow = uow;
             _mapper = mapper;
-            _schedulerService = schedulerService;
+            _notificationService = notificationService;
         }
 
         public async Task<TaskServiceModel> AddAsync(TaskCreationServiceModel entity)
@@ -32,7 +31,8 @@ namespace WebCalendar.Services.Implementation
             
             await _uow.SaveChangesAsync();
 
-            await _schedulerService.ScheduleTaskById(task.Id);
+            //await _schedulerService.ScheduleTaskById(task.Id);
+            await _notificationService.SendTaskNotificationAsync(task.Id, NotificationType.Start);
             
             TaskServiceModel taskServiceModel = _mapper.Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
 
@@ -68,7 +68,7 @@ namespace WebCalendar.Services.Implementation
 
             await RemoveAsync(taskServiceModel);
 
-            await _schedulerService.UnscheduleTaskById(id);
+            //await _schedulerService.UnscheduleTaskById(id);
         }
 
         public async Task RemoveAsync(TaskServiceModel entity)
@@ -88,7 +88,7 @@ namespace WebCalendar.Services.Implementation
 
             await _uow.SaveChangesAsync();
 
-            await _schedulerService.RescheduleTaskById(entity.Id);
+            //await _schedulerService.RescheduleTaskById(entity.Id);
         }
     }
 }

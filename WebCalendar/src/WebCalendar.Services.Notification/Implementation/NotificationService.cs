@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebCalendar.Common.Contracts;
@@ -54,17 +55,19 @@ namespace WebCalendar.Services.Notification.Implementation
                 predicate: c => c.Id == task.CalendarId,
                 include: calendars => calendars
                     .Include(c => c.User)
+                        .ThenInclude(u => u.PushSubscriptions)
                     .Include(c=> c.CalendarUsers)
                         .ThenInclude(cu => cu.User));
 
             List<User> usersForNotify = calendar.CalendarUsers.Select(cu => cu.User).ToList();
             usersForNotify.Add(calendar.User);
 
-            IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
+            List<string> emails = usersForNotify.Select(u => u.Email).ToList();
 
-            IEnumerable<string> deviceTokens = usersForNotify
+            List<string> deviceTokens = usersForNotify
                 .SelectMany(u => u.PushSubscriptions)
-                .Select(p => p.DeviceToken);
+                .Select(p => p.DeviceToken)
+                .ToList();
 
             switch (type)
             {
@@ -78,11 +81,15 @@ namespace WebCalendar.Services.Notification.Implementation
                     };
                     
                     _logger.LogInformation("push send");
-                    PushNotification.Models.Notification pushNotification = _mapper
+                    PushNotification.Models.PushNotification pushNotification = _mapper
                         .Map<PushNotificationServiceModel, 
-                            PushNotification.Models.Notification>(pushNotificationServiceModel);
+                            PushNotification.Models.PushNotification>(pushNotificationServiceModel);
 
-                    await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
+                    //await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
+                    string jobId = BackgroundJob.Schedule<IPushNotificationSender>(n => 
+                            n.SendPushNotificationAsync(deviceTokens, pushNotification), 
+                        DateTime.SpecifyKind(task.StartTime, DateTimeKind.Utc)
+                    );
                     break;
                 }
             }

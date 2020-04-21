@@ -7,7 +7,7 @@ namespace WebCalendar.Services.Notification.Mapper
     {
         public PushNotificationServiceProfile()
         {
-            CreateMap<PushNotificationServiceModel, PushNotification.Models.Notification>();
+            CreateMap<PushNotificationServiceModel, PushNotification.Models.PushNotification>();
         }
     }
 }

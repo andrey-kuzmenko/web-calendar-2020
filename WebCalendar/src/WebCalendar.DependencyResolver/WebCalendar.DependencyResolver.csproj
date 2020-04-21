@@ -17,7 +17,6 @@
       <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />
       <ProjectReference Include="..\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj" />
       <ProjectReference Include="..\WebCalendar.Services.Notification\WebCalendar.Services.Notification.csproj" />
-      <ProjectReference Include="..\WebCalendar.Services.Scheduler\WebCalendar.Services.Scheduler.csproj" />
       <ProjectReference Include="..\WebCalendar.Services\WebCalendar.Services.csproj" />
     </ItemGroup>
 

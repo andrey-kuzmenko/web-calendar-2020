@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Text;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebCalendar.Common.Contracts;
+using WebCalendar.DAL.EF;
 using WebCalendar.DependencyResolver;
 using WebCalendar.WebApi.Filters;
 using WebCalendar.WebApi.Middleware;
@@ -75,7 +77,8 @@ namespace WebCalendar.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDataInitializer dataInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDataInitializer dataInitializer, 
+            HangfireDbInitializer hangfireDbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -121,6 +124,9 @@ namespace WebCalendar.WebApi
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
+            hangfireDbInitializer.Seed();
+            app.UseHangfireServer();
+            
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,

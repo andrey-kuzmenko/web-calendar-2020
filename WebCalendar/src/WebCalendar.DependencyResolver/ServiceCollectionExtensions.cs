@@ -1,11 +1,9 @@
 ﻿using System;
+using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Quartz;
-using Quartz.Impl;
-using Quartz.Spi;
 using WebCalendar.Common;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
@@ -23,8 +21,6 @@ using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Implementation;
 using WebCalendar.Services.Notification.Contracts;
 using WebCalendar.Services.Notification.Implementation;
-using WebCalendar.Services.Scheduler.Contracts;
-using WebCalendar.Services.Scheduler.Implementation;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -36,7 +32,19 @@ namespace WebCalendar.DependencyResolver
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connection,
-                    builder => { builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null); }));
+                    builder =>
+                    {
+                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    }));
+            
+            string hangfireConnection = configuration["HangfireConnectionString"];
+            services.AddDbContext<HangfireDbContext>(options =>
+                options.UseSqlServer(hangfireConnection,
+                    builder =>
+                    {
+                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    }));
+            services.AddHangfire(x => x.UseSqlServerStorage(hangfireConnection));
 
             services.AddDefaultIdentity<User>(options =>
                 {
@@ -52,6 +60,7 @@ namespace WebCalendar.DependencyResolver
                 .AddDefaultTokenProviders();
             
             services.AddScoped<IDataInitializer, EFDataInitializer>();
+            services.AddScoped<HangfireDbInitializer>();
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EFRepositoryAsync<>));
 
@@ -69,7 +78,7 @@ namespace WebCalendar.DependencyResolver
                 .GetSection("FirebaseNotification")
                 .Get<FirebaseNotification>();
             
-            services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
+            services.AddSingleton<IPushNotificationSender, PushNotificationSender>(p =>
                 new PushNotificationSender(firebaseNotification));
             
             var emailConfig = configuration
@@ -78,17 +87,8 @@ namespace WebCalendar.DependencyResolver
             
             services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
                 new EmailSender.Implementation.EmailSender(emailConfig));
-            
+
             services.AddScoped<INotificationService, NotificationService>();
-
-            services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
-            services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
-                        services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
-            services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
-            services.AddScoped<ISchedulerService, SchedulerService>();
-
-            services.AddSingleton<NotificationJob>();
 
         }
     }
