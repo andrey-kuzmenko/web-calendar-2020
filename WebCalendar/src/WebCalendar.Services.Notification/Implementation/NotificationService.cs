@@ -8,6 +8,7 @@ using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.EmailSender.Contracts;
+using WebCalendar.EmailSender.Models;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.Services.Notification.Contracts;
 using WebCalendar.Services.Notification.Models;
@@ -47,11 +48,11 @@ namespace WebCalendar.Services.Notification.Implementation
         }*/
         public async Task SendTaskNotificationAsync(TaskNotificationServiceModel task, NotificationType type)
         {
-            //IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
+            List<string> emails = task.Users.Select(u => u.Email).ToList();
 
-            IEnumerable<string> deviceTokens = task.Users
+            List<string> deviceTokens = task.Users
                 .SelectMany(u => u.PushSubscriptions)
-                .Select(p => p.DeviceToken);
+                .Select(p => p.DeviceToken).ToList();
 
             switch (type)
             {
@@ -64,12 +65,18 @@ namespace WebCalendar.Services.Notification.Implementation
                         Url = "" //url to page with details
                     };
                     
-                    _logger.LogInformation("push send");
                     PushNotification.Models.Notification pushNotification = _mapper
                         .Map<PushNotificationServiceModel, 
                             PushNotification.Models.Notification>(pushNotificationServiceModel);
 
                     await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
+                    var emailMessage = new Message(emails, task.Title,
+                        "Time to start doing task\n" +
+                        "Description: " + task.Description +
+                        "\nStart at: " + task.StartTime.ToLocalTime());
+
+                    await _emailSender.SendEmailAsync(emailMessage);
+                    
                     break;
                 }
             }
