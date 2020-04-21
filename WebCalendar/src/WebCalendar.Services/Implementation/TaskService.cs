@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Hangfire;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
 using WebCalendar.Services.Contracts;
@@ -14,13 +15,11 @@ namespace WebCalendar.Services.Implementation
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _uow;
-        private readonly INotificationService _notificationService;
 
-        public TaskService(IUnitOfWork uow, IMapper mapper, INotificationService notificationService)
+        public TaskService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
             _mapper = mapper;
-            _notificationService = notificationService;
         }
 
         public async Task<TaskServiceModel> AddAsync(TaskCreationServiceModel entity)
@@ -30,9 +29,10 @@ namespace WebCalendar.Services.Implementation
             await _uow.GetRepository<DAL.Models.Entities.Task>().AddAsync(task);
             
             await _uow.SaveChangesAsync();
-
-            //await _schedulerService.ScheduleTaskById(task.Id);
-            await _notificationService.SendTaskNotificationAsync(task.Id, NotificationType.Start);
+            
+            BackgroundJob.Schedule<INotificationService>(service =>
+                service.SendTaskNotificationAsync(task.Id, NotificationType.Start), 
+                DateTime.SpecifyKind(task.StartTime, DateTimeKind.Utc));
             
             TaskServiceModel taskServiceModel = _mapper.Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
 

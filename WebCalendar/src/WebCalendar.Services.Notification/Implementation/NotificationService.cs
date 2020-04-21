@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebCalendar.Common.Contracts;
@@ -85,11 +83,7 @@ namespace WebCalendar.Services.Notification.Implementation
                         .Map<PushNotificationServiceModel, 
                             PushNotification.Models.PushNotification>(pushNotificationServiceModel);
 
-                    //await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
-                    string jobId = BackgroundJob.Schedule<IPushNotificationSender>(n => 
-                            n.SendPushNotificationAsync(deviceTokens, pushNotification), 
-                        DateTime.SpecifyKind(task.StartTime, DateTimeKind.Utc)
-                    );
+                    await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
                     break;
                 }
             }
