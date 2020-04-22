@@ -111,7 +111,7 @@ namespace WebCalendar.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware(typeof(LogHttpContextMiddleware));
+            app.UseMiddleware<LogHttpContextMiddleware>();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 

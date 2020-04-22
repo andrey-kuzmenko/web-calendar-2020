@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WebCalendar.DAL.Models;
-using WebCalendar.DAL.Models.Entities;
 
 namespace WebCalendar.Services.Scheduler
 {
@@ -17,12 +15,12 @@ namespace WebCalendar.Services.Scheduler
             string seconds = GetSeconds(schedule);
             string minutes = GetMinutes(schedule);
             string hours = GetHours(schedule);
-            string daysOfMounth = GetDaysOfMounth(schedule);
-            string mounthes = GetMounthes(schedule);
+            string daysOfMonth = GetDaysOfMonth(schedule);
+            string months = GetMonths(schedule);
             string daysOfWeek = GetDaysOfWeek(schedule);
             string years = GetYears(schedule);
 
-            return $"{seconds} {minutes} {hours} {daysOfMounth} {mounthes} {daysOfWeek} {years}";
+            return $"{seconds} {minutes} {hours} {daysOfMonth} {months} {daysOfWeek} {years}";
         }
 
         private static string Separate(IEnumerable<int> items)
@@ -47,19 +45,19 @@ namespace WebCalendar.Services.Scheduler
             return schedule.StartTime.Hour.ToString();
         }
 
-        private static string GetDaysOfMounth(IRepeatableActivity schedule)
+        private static string GetDaysOfMonth(IRepeatableActivity schedule)
         {
-            IEnumerable<int> daysOfMounth = schedule.DaysOfMounth;
+            IEnumerable<int> daysOfMonth = schedule.DaysOfMounth;
 
-            if (daysOfMounth == null || daysOfMounth.Count() == 0)
+            if (daysOfMonth == null || !daysOfMonth.Any())
             {
                 return UNDEFINED;
             }
 
-            return Separate(daysOfMounth);
+            return Separate(daysOfMonth);
         }
 
-        private static string GetMounthes(IRepeatableActivity schedule)
+        private static string GetMonths(IRepeatableActivity schedule)
         {
             return Separate(schedule.Monthes);
         }
@@ -68,7 +66,7 @@ namespace WebCalendar.Services.Scheduler
         {
             IEnumerable<int> daysOfWeek = schedule.DaysOfWeek;
 
-            if (daysOfWeek == null || daysOfWeek.Count() == 0)
+            if (daysOfWeek == null || !daysOfWeek.Any())
             {
                 return UNDEFINED;
             }

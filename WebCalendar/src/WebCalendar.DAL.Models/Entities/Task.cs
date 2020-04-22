@@ -2,7 +2,7 @@ using System;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Task  : IEntity, IActivity, ISoftDeletable, INotificable
+    public class Task  : IEntity, IActivity, ISoftDeletable
     {
         public Guid Id { get; set; }
         public DateTime AddedDate { get; set; }

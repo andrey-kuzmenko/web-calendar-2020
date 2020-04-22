@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
+      <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
       <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />
       <ProjectReference Include="..\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj" />
     </ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Reminder : IEntity, IRepeatableActivity, ISoftDeletable, INotificable
+    public class Reminder : IEntity, IRepeatableActivity, ISoftDeletable
     {
         public Guid Id { get; set; }  
         public DateTime AddedDate { get; set; }
