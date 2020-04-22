@@ -13,7 +13,7 @@ namespace WebCalendar.WebApi.Validation
         private const int MIN_NAME_LENGTH = 2;
         private const int MAX_NAME_LENGTH = 20;
 
-        UserRegistrationValidator()
+        public UserRegistrationValidator()
         {
             RuleFor(u => u.FirstName)
                 .NotEmpty()
