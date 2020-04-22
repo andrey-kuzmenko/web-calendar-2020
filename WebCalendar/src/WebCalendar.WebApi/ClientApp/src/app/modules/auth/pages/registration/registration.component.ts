@@ -67,9 +67,8 @@ export class RegistrationComponent implements OnInit {
     this.authenticationService.register(user).subscribe(response => {
         this.router.navigate(["/login"]);
       },
-      response => {
-        console.log(response.error);
-        if(response?.error?.message?.some(m => m.code == "DuplicateEmail")){
+      errors => {
+        if(errors?.some(m => m.code == "DuplicateEmail")){
           this.serverErrors.duplicateEmail = true;
         }
       });

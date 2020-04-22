@@ -32,5 +32,7 @@ namespace WebCalendar.DAL.Repositories.Contracts
             bool ignoreQueryFilters = false);
 
         Task<T> GetByIdAsync(Guid id);
+        
+        Task<bool> ExistsAsync(Expression<Func<T, bool>> selector = null);
     }
 }
