@@ -27,7 +27,7 @@ namespace WebCalendar.WebApi.Validation
                 .MinimumLength(MIN_NAME_LENGTH)
                 .MaximumLength(MAX_NAME_LENGTH)
                 .Must(IsAValidName).WithMessage(INVALID_NAME_MESSAGE)
-                .WithName("Second name");
+                .WithName("Last name");
 
             RuleFor(u => u.Email)
                 .NotEmpty()
