@@ -43,8 +43,8 @@ namespace WebCalendar.WebApi
 
             services.AddControllers(options => 
               {
-                options.Filters.Add(typeof(ValidationFilter)));
-                options.Filters.Add(typeof(ApiExceptionFilter)));
+                options.Filters.Add(typeof(ValidationFilter));
+                options.Filters.Add(typeof(ApiExceptionFilter));
               }).AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddAuthentication(options =>
