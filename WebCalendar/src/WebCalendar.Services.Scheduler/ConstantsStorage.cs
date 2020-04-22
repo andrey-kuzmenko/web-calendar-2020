@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebCalendar.Services.Scheduler
+﻿namespace WebCalendar.Services.Scheduler
 {
     public static class ConstantsStorage
     {

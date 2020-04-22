@@ -13,8 +13,6 @@ namespace WebCalendar.Services.Scheduler.Mapper
         public SchedulerEventProfile()
         {
             CreateMap<Event, SchedulerEvent>()
-               .ForMember(e => e.Users,
-                   o => o.MapFrom(e => e.GetUsers()))
                .ForMember(e => e.CronExpression,
                     o => o.MapFrom(e => e.GetCronExpression()));
         }

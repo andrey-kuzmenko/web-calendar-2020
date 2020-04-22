@@ -1,19 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Spi;
-using WebCalendar.Services.Scheduler.Models;
-using Newtonsoft.Json;
 using Task = System.Threading.Tasks.Task;
-using WebCalendar.Services.Scheduler;
-using WebCalendar.DAL;
-using WebCalendar.DAL.Models.Entities;
-using WebCalendar.DAL.Repositories.Contracts;
-using WebCalendar.Common.Contracts;
 using WebCalendar.Services.Scheduler.Contracts;
 
 namespace WebCalendar.Services.Scheduler.Implementation
