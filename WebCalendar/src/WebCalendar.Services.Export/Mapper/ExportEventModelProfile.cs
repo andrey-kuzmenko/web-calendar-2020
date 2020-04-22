@@ -1,0 +1,25 @@
+﻿using Ical.Net.CalendarComponents;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using WebCalendar.Common;
+using WebCalendar.DAL.Models.Entities;
+
+namespace WebCalendar.Services.Export.Mapper
+{
+    class ExportEventModelProfile : AutoMapperProfile
+    {
+        public ExportEventModelProfile()
+        {
+            CreateMap<Event, CalendarEvent>()
+                   .ForMember(e => e.Uid, o => o.MapFrom(e => e.Id))
+                   .ForMember(e => e.Name, o => o.MapFrom(e => e.Title))
+                   .ForMember(e => e.Description, o => o.MapFrom(e => e.Description))
+                   .ForMember(e => e.Location, o => o.MapFrom(e => e.Location))
+                   .ForMember(e => e.Created, o => o.MapFrom(e => e.AddedDate))
+                   .ForMember(e => e.LastModified, o => o.MapFrom(e => e.ModifiedDate))
+                   .ForMember(e => e.Start, o => o.MapFrom(e => e.StartTime))
+                   .ForMember(e => e.End, o => o.MapFrom(e => e.EndTime));
+        }
+    }
+}
