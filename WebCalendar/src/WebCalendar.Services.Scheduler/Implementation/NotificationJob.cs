@@ -17,7 +17,6 @@ namespace WebCalendar.Services.Scheduler.Implementation
     public class NotificationJob : IJob
     {
         private readonly ILogger<NotificationJob> _logger;
-        //private readonly INotificationService _notificationService;
         public static readonly string JobDataKey = "key1";
         public static readonly string JobActivityTypeKey = "key2";
         private readonly IMapper _mapper;
@@ -27,7 +26,6 @@ namespace WebCalendar.Services.Scheduler.Implementation
         public NotificationJob(ILogger<NotificationJob> logger, IServiceScopeFactory serviceScopeFactory, IMapper mapper)
         {
             _logger = logger;
-            //_notificationService = notificationService;
             _serviceScopeFactory = serviceScopeFactory;
             _mapper = mapper;
         }
@@ -36,6 +34,7 @@ namespace WebCalendar.Services.Scheduler.Implementation
         {
             JobDataMap jobDataMap = context.JobDetail.JobDataMap;
             
+            string activityId = jobDataMap.GetString(JobDataKey);
             string activityType = jobDataMap.GetString(JobActivityTypeKey);
             
             
@@ -43,19 +42,15 @@ namespace WebCalendar.Services.Scheduler.Implementation
             {
                 case ConstantsStorage.TASK:
                 {
-                    _logger.LogInformation("job done");
-                    string value = jobDataMap.GetString(JobDataKey);
-                    var task = JsonConvert.DeserializeObject<SchedulerTask>(value);
-                    TaskNotificationServiceModel taskNotificationServiceModel = _mapper
-                        .Map<SchedulerTask, TaskNotificationServiceModel>(task);
                     
-                    using (IServiceScope scope = _serviceScopeFactory.CreateScope())
-                    {
-                        var notificationService = scope.ServiceProvider.GetService<INotificationService>();
-                        await notificationService.SendTaskNotificationAsync(taskNotificationServiceModel, NotificationType.Start);
-                    }
+                    using IServiceScope scope = _serviceScopeFactory.CreateScope();
+                    
+                    var notificationService = scope.ServiceProvider.GetService<INotificationService>();
+                        
+                    await notificationService.SendTaskNotificationAsync(new Guid(activityId), NotificationType.Start);
                     
                     break;
+                    
                 }
 
                 case ConstantsStorage.EVENT:

@@ -46,13 +46,27 @@ namespace WebCalendar.Services.Notification.Implementation
             
             throw new NotImplementedException();
         }*/
-        public async Task SendTaskNotificationAsync(TaskNotificationServiceModel task, NotificationType type)
+        public async Task SendTaskNotificationAsync(Guid taskId, NotificationType type)
         {
-            List<string> emails = task.Users.Select(u => u.Email).ToList();
+            DAL.Models.Entities.Task task = await _uow.GetRepository<DAL.Models.Entities.Task>().GetFirstOrDefaultAsync(
+                predicate: t => t.Id == taskId);
+            
+            Calendar calendar = await _uow.GetRepository<Calendar>().GetFirstOrDefaultAsync(
+                predicate: c => c.Id == task.CalendarId,
+                include: calendars => calendars
+                    .Include(c => c.User)
+                        .ThenInclude(u => u.PushSubscriptions)
+                    .Include(c=> c.CalendarUsers)
+                        .ThenInclude(cu => cu.User));
 
-            List<string> deviceTokens = task.Users
+            List<User> usersForNotify = calendar.CalendarUsers.Select(cu => cu.User).ToList();
+            usersForNotify.Add(calendar.User);
+
+            IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
+
+            IEnumerable<string> deviceTokens = usersForNotify
                 .SelectMany(u => u.PushSubscriptions)
-                .Select(p => p.DeviceToken).ToList();
+                .Select(p => p.DeviceToken);
 
             switch (type)
             {
