@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using Quartz;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Quartz;
 using WebCalendar.Services.Scheduler.Implementation;
 using WebCalendar.Services.Scheduler.Models;
 
@@ -23,7 +21,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(@event))
+                .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
                 .Build();
 

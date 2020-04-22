@@ -16,7 +16,5 @@ namespace WebCalendar.Services.Scheduler.Models
         public string CronExpression { get; set; }
         public TimeSpan? NotifyBeforeInterval { get; set; }
         public int? RepetitionsCount { get; set; }
-
-        public ICollection<SchedulerUser> Users { get; set; }
     }
 }

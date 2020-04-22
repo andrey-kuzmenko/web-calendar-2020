@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Event : IEntity, IRepeatableActivity, ISoftDeletable, INotificable
+    public class Event : IEntity, IRepeatableActivity, ISoftDeletable
     {
         public Event()
         {
@@ -21,8 +21,6 @@ namespace WebCalendar.DAL.Models.Entities
         public string Location { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public TimeSpan? NotifyBeforeInterval { get; set; }
-        public int? RepetitionsCount { get; set; }
 
         public ISet<int> DaysOfWeek { get; set; }
         public ISet<int> DaysOfMounth { get; set; }

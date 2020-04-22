@@ -12,6 +12,5 @@ namespace WebCalendar.Services.Scheduler.Contracts
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
-        public ICollection<SchedulerUser> Users { get; set;}
     }
 }
