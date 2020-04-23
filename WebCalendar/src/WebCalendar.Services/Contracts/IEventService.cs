@@ -7,7 +7,7 @@ namespace WebCalendar.Services.Contracts
 {
     public interface IEventService
     {
-        Task AddAsync(EventCreationServiceModel entity);
+        Task<EventServiceModel> AddAsync(EventCreationServiceModel entity);
         Task<IEnumerable<EventServiceModel>> GetAllAsync();
         Task<EventServiceModel> GetByIdAsync(Guid id);
         Task RemoveAsync(Guid id);
