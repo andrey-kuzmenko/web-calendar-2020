@@ -36,11 +36,13 @@ namespace WebCalendar.Services.Export.Implementation
                     .Include(c => c.Events)
                     .Include(c => c.Tasks));
 
-            Ical.Net.Calendar iCalenadar = _mapper.Map<Calendar, Ical.Net.Calendar>(calendar);
+            Ical.Net.Calendar iCalendar = _mapper.Map<Calendar, Ical.Net.Calendar>(calendar);
 
             CalendarSerializer serializer = new CalendarSerializer(new SerializationContext());
 
-            string serializedCalendar = serializer.SerializeToString(calendar);
+            string serializedCalendar = serializer.SerializeToString(iCalendar);
+         //   string temp = serializedCalendar.Replace("\0", string.Empty);
+
             byte[] bytesCalendar = Encoding.UTF8.GetBytes(serializedCalendar);
 
             return bytesCalendar;
