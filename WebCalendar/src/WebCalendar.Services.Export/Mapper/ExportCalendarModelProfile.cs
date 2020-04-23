@@ -11,8 +11,6 @@ namespace WebCalendar.Services.Export.Mapper
         public ExportCalendarModelProfile()
         {
             CreateMap<DAL.Models.Entities.Calendar, Calendar>()
-                   /*.ForMember(e => e.Name, o => o.MapFrom(e => e.Title))
-                   .ForMember(e => e.)*/
                    .ForMember(e => e.Events, o => o.MapFrom(e => e.Events))
                    .ForMember(e => e.Todos, o => o.MapFrom(e => e.Tasks));
         }
