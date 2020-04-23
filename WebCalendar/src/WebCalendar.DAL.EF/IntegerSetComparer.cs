@@ -1,22 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace WebCalendar.DAL.Models
 {
-    public class IntegerSetComparer : ValueComparer<ISet<int>>
+    public class IntegerSetComparer : ValueComparer<ICollection<int>>
     {
-        public IntegerSetComparer() : base(GetEqualsExpression(), GetHashCodeExpression(), GetSnapshotExpression())
+        public IntegerSetComparer() : base(true)//: base(GetEqualsExpression(), GetHashCodeExpression(), GetSnapshotExpression())
         {
 
         }
 
-        private static Expression<Func<ISet<int>, ISet<int>, bool>> GetEqualsExpression() => (set1, set2) => set1.SetEquals(set2);
-        private static Expression<Func<ISet<int>, int>> GetHashCodeExpression() => set => GetISetHashCode(set);
-        private static Expression<Func<ISet<int>, ISet<int>>> GetSnapshotExpression() => set => new HashSet<int>(set);
+      /*  private static Expression<Func<ICollection<int>, ICollection<int>, bool>> 
+            GetEqualsExpression() => (set1, set2) => set1.SequenceEqual(set2);
+        private static Expression<Func<ICollection<int>, int>> GetHashCodeExpression() => set => GetICollectionHashCode(set);
+        private static Expression<Func<ICollection<int>, ICollection<int>>> GetSnapshotExpression() => set => new HashSet<int>(set);
        
-        private static int GetISetHashCode(ISet<int> set)
+        private static int GetICollectionHashCode(ICollection<int> set)
         {
             int hashCode = 0;
 
@@ -26,6 +28,6 @@ namespace WebCalendar.DAL.Models
             }
 
             return hashCode;
-        }
+        }*/
     }
 }
