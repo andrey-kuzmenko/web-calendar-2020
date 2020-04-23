@@ -16,6 +16,5 @@
 
 
 <ng-template #tpl>
-  <app-task-popover [taskId]="currentTaskId" [currentPopover]="currentEventsPopover"
-                    (toggleTask)="updateEvents(calendars)"></app-task-popover>
+  <app-task-popover [taskId]="currentTaskId" [currentPopover]="currentEventsPopover" (onToggleTask)="updateEvents(calendars)"></app-task-popover>
 </ng-template>
