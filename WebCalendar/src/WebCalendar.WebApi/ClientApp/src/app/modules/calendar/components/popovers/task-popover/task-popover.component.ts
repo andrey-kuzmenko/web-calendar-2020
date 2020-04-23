@@ -21,8 +21,6 @@ export class TaskPopoverComponent implements OnInit {
 
     taskSubject: BehaviorSubject<Task>;
 
-    // taskService: TaskService
-
 
     constructor(private taskService: TaskService) {
         this.taskSubject = new BehaviorSubject<Task>(this.task);

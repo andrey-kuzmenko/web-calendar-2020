@@ -62,7 +62,7 @@ export class RegistrationComponent implements OnInit {
       lastName: this.registerForm.value.lastName,
       email: this.registerForm.value.email,
       password: this.registerForm.value.password
-    }
+    };
 
     this.authenticationService.register(user).subscribe(response => {
         this.router.navigate(["/login"]);
