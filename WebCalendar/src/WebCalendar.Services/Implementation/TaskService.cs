@@ -72,15 +72,18 @@ namespace WebCalendar.Services.Implementation
             TaskServiceModel taskServiceModel = _mapper
                 .Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
 
-            await RemoveAsync(taskServiceModel);
-
             await _schedulerService.UnscheduleTaskById(id);
+            
+            await RemoveAsync(taskServiceModel);
         }
 
         public async Task RemoveAsync(TaskServiceModel entity)
         {
-            DAL.Models.Entities.Task task = _mapper
-                .Map<TaskServiceModel, DAL.Models.Entities.Task>(entity);
+            DAL.Models.Entities.Task task = await _uow.GetRepository<DAL.Models.Entities.Task>()
+                .GetFirstOrDefaultAsync(
+                    predicate: t => t.Id == entity.Id,
+                    disableTracking: false);
+
             _uow.GetRepository<DAL.Models.Entities.Task>().Remove(task);
 
             await _uow.SaveChangesAsync();

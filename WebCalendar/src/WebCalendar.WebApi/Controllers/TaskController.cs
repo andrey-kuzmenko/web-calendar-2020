@@ -114,5 +114,28 @@ namespace WebCalendar.WebApi.Controllers
 
             return NoContent();
         }
+        
+        // DELETE : api/task/{taskId}/{userId}
+        [HttpDelete("{taskId}/{userId}")]
+        public async Task<IActionResult> DeleteTask(Guid taskId, Guid userId)
+        {
+            UserServiceModel user = await _userService.GetByPrincipalAsync(User);
+
+            if (user.Id != userId)
+            {
+                return Unauthorized();
+            }
+
+            bool exists = await _taskService.ExistsAsync(taskId);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            await _taskService.RemoveAsync(taskId);
+
+            return Ok();
+        }
     }
 }
