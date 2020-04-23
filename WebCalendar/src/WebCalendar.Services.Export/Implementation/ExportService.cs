@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ical.Net.CalendarComponents;
-//using Ical.Net;
-using Ical.Net.DataTypes;
-//using Ical.Net.Serialization.iCalendar.Serializers;
 using Ical.Net.Serialization;
 using Microsoft.EntityFrameworkCore;
 using WebCalendar.Common.Contracts;
@@ -39,10 +34,25 @@ namespace WebCalendar.Services.Export.Implementation
             Ical.Net.Calendar iCalendar = _mapper.Map<Calendar, Ical.Net.Calendar>(calendar);
 
             CalendarSerializer serializer = new CalendarSerializer(new SerializationContext());
-
             string serializedCalendar = serializer.SerializeToString(iCalendar);
-         //   string temp = serializedCalendar.Replace("\0", string.Empty);
+            byte[] bytesCalendar = Encoding.UTF8.GetBytes(serializedCalendar);
 
+            return bytesCalendar;
+        }
+
+        /// <summary>
+        /// Useless
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<byte[]> ExportEvent(Guid id)
+        {
+            Event @event = await _uow.GetRepository<Event>().GetByIdAsync(id);
+
+            CalendarEvent iCalendar = _mapper.Map<Event, CalendarEvent>(@event);
+
+            CalendarSerializer serializer = new CalendarSerializer(new SerializationContext());
+            string serializedCalendar = serializer.SerializeToString(iCalendar);
             byte[] bytesCalendar = Encoding.UTF8.GetBytes(serializedCalendar);
 
             return bytesCalendar;

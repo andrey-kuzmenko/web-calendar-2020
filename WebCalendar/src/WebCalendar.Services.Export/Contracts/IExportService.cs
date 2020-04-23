@@ -8,5 +8,6 @@ namespace WebCalendar.Services.Export.Contracts
     public interface IExportService
     {
         Task<byte[]> ExportCalendar(Guid id);
+        Task<byte[]> ExportEvent(Guid id);
     }
 }
