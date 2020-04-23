@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
+using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.Contracts;
 using WebCalendar.Services.Models.Task;
 using WebCalendar.Services.Scheduler;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Models;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebCalendar.Services.Implementation
 {
@@ -53,7 +56,10 @@ namespace WebCalendar.Services.Implementation
         public async Task<TaskServiceModel> GetByIdAsync(Guid id)
         {
             DAL.Models.Entities.Task task = await _uow.GetRepository<DAL.Models.Entities.Task>()
-                .GetByIdAsync(id);
+                .GetFirstOrDefaultAsync(
+                    predicate: t => t.Id == id,
+                    include: query => query
+                        .Include(t => t.Calendar));
             TaskServiceModel taskServiceModel = _mapper.Map<DAL.Models.Entities.Task, TaskServiceModel>(task);
 
             return taskServiceModel;
@@ -89,6 +95,36 @@ namespace WebCalendar.Services.Implementation
             await _uow.SaveChangesAsync();
 
             await _schedulerService.RescheduleTaskById(entity.Id);
+        }
+
+        public async Task<IEnumerable<TaskServiceModel>> GetAllByCalendarIdAsync(Guid calendarId)
+        {
+            IEnumerable<DAL.Models.Entities.Task> tasks = await _uow.GetRepository<DAL.Models.Entities.Task>()
+                .GetAllAsync(t => t.CalendarId == calendarId);
+
+            IEnumerable<TaskServiceModel> taskServiceModels = _mapper
+                .Map<IEnumerable<DAL.Models.Entities.Task>, IEnumerable<TaskServiceModel>>(tasks);
+
+            return taskServiceModels;
+        }
+
+        public async Task<bool> ExistsAsync(Guid taskId)
+        {
+            bool exists = await _uow.GetRepository<DAL.Models.Entities.Task>()
+                .ExistsAsync(t => t.Id == taskId);
+
+            return exists;
+        }
+
+        public async Task TaskCompletion(Guid taskId, bool isDone)
+        {
+            DAL.Models.Entities.Task task = await _uow.GetRepository<DAL.Models.Entities.Task>().GetByIdAsync(taskId);
+            
+            task.IsDone = isDone;
+            
+            _uow.GetRepository<DAL.Models.Entities.Task>().Update(task);
+
+            await _uow.SaveChangesAsync();
         }
     }
 }

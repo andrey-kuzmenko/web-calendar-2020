@@ -14,6 +14,8 @@ import { TimepickerComponent } from './components/timepicker/timepicker.componen
 import {ActivityModalComponent} from "./components/activity-modal/activity-modal.component";
 import {CalendarService} from "../../data/service/calendar.service";
 import {TaskService} from "../../data/service/task.service";
+import {ToppyModule} from "toppy";
+import { TaskPopoverComponent } from './components/popovers/task-popover/task-popover.component';
 
 
 
@@ -26,7 +28,8 @@ import {TaskService} from "../../data/service/task.service";
         EmailNotificationComponent,
         ActivityModalComponent,
         DatepickerPopupComponent,
-        TimepickerComponent
+        TimepickerComponent,
+        TaskPopoverComponent
     ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import {TaskService} from "../../data/service/task.service";
     FullCalendarModule,
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToppyModule
   ],
   providers:[
     CalendarService,

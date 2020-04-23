@@ -1,2 +1,2 @@
 <button (click)="openAddEventModal()">Create</button>
-<app-calendar></app-calendar>
+<app-calendar #calendarComponent [calendars]="userCalendars"></app-calendar>

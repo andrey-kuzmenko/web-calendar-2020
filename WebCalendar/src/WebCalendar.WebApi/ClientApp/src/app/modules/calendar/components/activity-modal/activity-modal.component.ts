@@ -40,6 +40,7 @@ export class ActivityModalComponent implements OnInit {
           .subscribe(task => {
             console.log(typeof task.startTime)
             console.log(task);
+            this.activeModal.close('save')
           });
       }
     }

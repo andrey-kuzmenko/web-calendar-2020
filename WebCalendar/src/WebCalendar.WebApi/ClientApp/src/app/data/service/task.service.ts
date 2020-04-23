@@ -22,4 +22,43 @@ export class TaskService {
         return task;
       }));
   }
+
+  getAllTasks(calendarId: string): Observable<Array<Task>>{
+    const user = this.authenticationService.currentUserValue;
+    return this.http.get<Array<Task>>(`${environment.apiUrl}/task/all/${calendarId}/${user.id}`)
+      .pipe(map(tasks => {
+        tasks.forEach((value, index, array) => {
+          array[index].startTime = new Date(value.startTime + 'Z');
+        });
+        return tasks;
+      }));
+  }
+
+  getTaskById(taskId: string): Observable<Task>{
+    const user = this.authenticationService.currentUserValue;
+    return this.http.get<Task>(`${environment.apiUrl}/task/${taskId}/${user.id}`)
+      .pipe(map(task => {
+          task.startTime = new Date(task.startTime + 'Z');
+        return task;
+      }));
+  }
+
+  checkTask(taskId: string): Observable<any>{
+    return this.toggleTaskCompletion({
+      id: taskId,
+      isDone: true
+    });
+  }
+
+  uncheckTask(taskId: string): Observable<any> {
+    return this.toggleTaskCompletion({
+      id: taskId,
+      isDone: false
+    });
+  }
+
+  private toggleTaskCompletion(task: Task): Observable<any> {
+    const user = this.authenticationService.currentUserValue;
+    return this.http.put(`${environment.apiUrl}/task/completion/${task.id}/${user.id}`, task);
+  }
 }

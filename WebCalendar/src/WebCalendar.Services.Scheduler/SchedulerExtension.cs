@@ -86,7 +86,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(task))
+                .UsingJobData(NotificationJob.JobDataKey, task.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.TASK)
                 .Build();
 

@@ -1,5 +1,4 @@
-<div style="height: 90vh">
-  <button (click)="monthView()">Month view</button>
+<div style="height: calc(100vh - 118px)"> <!--hardcoded height-->
   <full-calendar #calendar
                  [plugins]="calendarPlugins"
                  [height]="calendarSettings.height"
@@ -7,6 +6,15 @@
                  [firstDay]="calendarSettings.firstDay"
                  [eventTimeFormat]="calendarSettings.eventTimeFormat"
                  [slotLabelFormat]="calendarSettings.eventTimeFormat"
+                 [header]="calendarSettings.header"
                  (eventRender)="eventRender($event)"
+                 [nowIndicator]="calendarSettings.nowIndicator"
+                 (eventClick)="onEventClick($event)"
+                 (dateClick)="onDateClick($event)"
   ></full-calendar>
 </div>
+
+
+<ng-template #tpl>
+  <app-task-popover [taskId]="currentTaskId" [currentPopover]="currentEventsPopover" (onToggleTask)="updateEvents(calendars)"></app-task-popover>
+</ng-template>

@@ -13,5 +13,10 @@ namespace WebCalendar.Services.Contracts
         Task RemoveAsync(Guid id);
         Task RemoveAsync(TaskServiceModel entity);
         Task UpdateAsync(TaskEditionServiceModel entity);
+
+        Task<IEnumerable<TaskServiceModel>> GetAllByCalendarIdAsync(Guid calendarId);
+
+        Task<bool> ExistsAsync(Guid taskId);
+        Task TaskCompletion(Guid taskId, bool isDone);
     }
 }
