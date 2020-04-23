@@ -6,9 +6,9 @@ namespace WebCalendar.DAL.Models
 {
     public interface IRepeatableActivity : IActivity
     {
-        ISet<int> DaysOfWeek { get; set; }
-        ISet<int> DaysOfMounth { get; set; }
-        ISet<int> Monthes { get; set; }
-        ISet<int> Years { get; set; }
+        ICollection<int> DaysOfWeek { get; set; }
+        ICollection<int> DaysOfMounth { get; set; }
+        ICollection<int> Monthes { get; set; }
+        ICollection<int> Years { get; set; }
     }
 }
