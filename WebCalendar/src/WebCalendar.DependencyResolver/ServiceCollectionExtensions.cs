@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +26,8 @@ using WebCalendar.Services.Notification.Contracts;
 using WebCalendar.Services.Notification.Implementation;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Implementation;
+using WebCalendar.Services.Export.Implementation;
+using WebCalendar.Services.Export.Contracts;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -69,28 +72,28 @@ namespace WebCalendar.DependencyResolver
                 .GetSection("FirebaseNotification")
                 .Get<FirebaseNotification>();
             
-            services.AddSingleton<IPushNotificationSender, PushNotificationSender>(p =>
+            services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
                 new PushNotificationSender(firebaseNotification));
             
             var emailConfig = configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
             
-            services.AddSingleton<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
+            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
                 new EmailSender.Implementation.EmailSender(emailConfig));
             
-            services.AddSingleton<INotificationService, NotificationService>();
-
+            services.AddScoped<INotificationService, NotificationService>();
 
             services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
             services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
                         services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>(s => new StdSchedulerFactory(new NameValueCollection()));
             services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
             services.AddScoped<ISchedulerService, SchedulerService>();
 
             services.AddSingleton<NotificationJob>();
 
+            services.AddScoped<IExportService, ExportService>();
         }
     }
 }

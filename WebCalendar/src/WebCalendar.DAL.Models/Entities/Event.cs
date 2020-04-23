@@ -3,11 +3,15 @@ using System.Collections.Generic;
 
 namespace WebCalendar.DAL.Models.Entities
 {
-    public class Event : IEntity, IRepeatableActivity, ISoftDeletable, INotificable
+    public class Event : IEntity, IRepeatableActivity, ISoftDeletable
     {
         public Event()
         {
             UserEvents = new HashSet<UserEvent>();
+            DaysOfWeek = new HashSet<int>();
+            DaysOfMounth = new HashSet<int>();
+            Monthes = new HashSet<int>();
+            Years = new HashSet<int>();
         }
 
         public Guid Id { get; set; }
@@ -21,13 +25,11 @@ namespace WebCalendar.DAL.Models.Entities
         public string Location { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public TimeSpan? NotifyBeforeInterval { get; set; }
-        public int? RepetitionsCount { get; set; }
 
-        public ISet<int> DaysOfWeek { get; set; }
-        public ISet<int> DaysOfMounth { get; set; }
-        public ISet<int> Monthes { get; set; }
-        public ISet<int> Years { get; set; }
+        public ICollection<int> DaysOfWeek { get; set; }
+        public ICollection<int> DaysOfMounth { get; set; }
+        public ICollection<int> Monthes { get; set; }
+        public ICollection<int> Years { get; set; }
 
         public Guid CalendarId { get; set; }
         public Calendar Calendar { get; set; }

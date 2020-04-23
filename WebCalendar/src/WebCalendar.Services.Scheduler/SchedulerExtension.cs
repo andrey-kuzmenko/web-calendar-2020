@@ -1,9 +1,7 @@
-﻿using Newtonsoft.Json;
-using Quartz;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Quartz;
 using WebCalendar.Services.Scheduler.Implementation;
 using WebCalendar.Services.Scheduler.Models;
 
@@ -23,13 +21,15 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(@event))
+                .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
+                .StartAt(@event.StartTime)
                 .WithCronSchedule(@event.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
+                .EndAt(@event.EndTime)
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);
@@ -52,7 +52,7 @@ namespace WebCalendar.Services.Scheduler
         public static async Task ScheduleReminder(this IScheduler scheduler, SchedulerReminder reminder)
         {
             JobKey jobKey = new JobKey(reminder.Id.ToString(), ConstantsStorage.REMINDER_GROUP);
-            TriggerKey triggerKey = new TriggerKey(reminder.Id.ToString(, ConstantsStorage.REMINDER_GROUP);
+            TriggerKey triggerKey = new TriggerKey(reminder.Id.ToString(), ConstantsStorage.REMINDER_GROUP);
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
@@ -62,6 +62,7 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
+                .StartAt(reminder.StartTime)
                 .WithCronSchedule(reminder.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
                 .Build();
 
