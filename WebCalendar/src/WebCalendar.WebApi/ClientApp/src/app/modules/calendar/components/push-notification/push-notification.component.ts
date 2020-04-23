@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {PushNotificationService} from "../../../../core/service/push-notification.service";
+import {Component, OnInit} from '@angular/core';
+import {PushNotificationService} from '../../../../core/service/push-notification.service';
 
 @Component({
   selector: 'app-push-notification',

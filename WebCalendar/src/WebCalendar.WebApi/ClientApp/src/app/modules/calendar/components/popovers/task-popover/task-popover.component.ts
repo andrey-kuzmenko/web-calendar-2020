@@ -5,63 +5,60 @@ import {BehaviorSubject} from 'rxjs';
 import {ToppyControl} from 'toppy';
 
 @Component({
-    selector: 'app-task-popover',
-    templateUrl: './task-popover.component.html',
-    styleUrls: ['./task-popover.component.scss']
+  selector: 'app-task-popover',
+  templateUrl: './task-popover.component.html',
+  styleUrls: ['./task-popover.component.scss']
 })
 export class TaskPopoverComponent implements OnInit {
 
-    @Input() taskId: string;
-    @Input() currentPopover: ToppyControl;
-    @Output() toggleTask: EventEmitter<boolean>;
+  @Input() taskId: string;
+  @Input() currentPopover: ToppyControl;
+  @Output() toggleTask: EventEmitter<boolean>;
 
-    task: Task = {
-        title: 'Loading...'
-    };
+  task: Task = {
+    title: 'Loading...'
+  };
 
-    taskSubject: BehaviorSubject<Task>;
+  taskSubject: BehaviorSubject<Task>;
 
-    // taskService: TaskService
+  constructor(private taskService: TaskService) {
+    this.taskSubject = new BehaviorSubject<Task>(this.task);
+    this.toggleTask = new EventEmitter<boolean>();
+  }
 
+  ngOnInit(): void {
 
-    constructor(private taskService: TaskService) {
-        this.taskSubject = new BehaviorSubject<Task>(this.task);
-        this.toggleTask = new EventEmitter<boolean>();
-    }
+    this.taskService.getTaskById(this.taskId)
+      .subscribe(value => {
+        this.task = value;
+        this.taskSubject.next(this.task);
+      });
+  }
 
-    ngOnInit(): void {
+  close() {
+    this.currentPopover.close();
+  }
 
-        this.taskService.getTaskById(this.taskId)
-            .subscribe(value => {
-                this.task = value;
-                this.taskSubject.next(this.task);
-            });
-    }
+  checkTaskDone() {
+    this.taskService.checkTask(this.task.id)
+      .subscribe(value => {
+        this.task.isDone = true;
+        this.toggleTask.emit(true);
+      });
+  }
 
-    close() {
+  uncheckTaskDone() {
+    this.taskService.uncheckTask(this.task.id)
+      .subscribe(value => {
+        this.task.isDone = false;
+        this.toggleTask.emit(false);
+      });
+  }
+
+  deleteTask() {
+    this.taskService.deleteTask(this.task.id)
+      .subscribe(value => {
         this.currentPopover.close();
-    }
-
-    checkTaskDone() {
-        this.taskService.checkTask(this.task.id)
-            .subscribe(value => {
-                this.task.isDone = true;
-                this.toggleTask.emit(true);
-            });
-    }
-
-    uncheckTaskDone() {
-        this.taskService.uncheckTask(this.task.id)
-            .subscribe(value => {
-                this.task.isDone = false;
-                this.toggleTask.emit(false);
-            });
-    }
-
-    deleteTask() {
-        this.taskService.deleteTask(this.task.id)
-            .subscribe(value => {
-                this.currentPopover.close();
-            });
-    }
+      });
+  }
 }

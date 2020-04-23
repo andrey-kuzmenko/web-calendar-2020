@@ -1,4 +1,4 @@
-﻿import {Calendar} from "./calendar";
+﻿import {Calendar} from './calendar';
 
 export class Task {
   id?: string;
@@ -7,5 +7,5 @@ export class Task {
   startTime?: Date;
   isDone?: boolean;
   calendarId?: string;
-  calendar?: Calendar
+  calendar?: Calendar;
 }

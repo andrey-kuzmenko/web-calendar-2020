@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {NgbActiveModal, NgbDate} from "@ng-bootstrap/ng-bootstrap";
-import {Task} from "../../../../data/schema/task";
-import {Calendar} from "../../../../data/schema/calendar";
-import {TaskService} from "../../../../data/service/task.service";
+import {NgbActiveModal, NgbDate} from '@ng-bootstrap/ng-bootstrap';
+import {Task} from '../../../../data/schema/task';
+import {Calendar} from '../../../../data/schema/calendar';
+import {TaskService} from '../../../../data/service/task.service';
 
 @Component({
   selector: 'app-activity-modal',
@@ -14,7 +14,7 @@ export class ActivityModalComponent implements OnInit {
   @Input() userCalendars: Array<Calendar>;
 
   taskContent: Task;
-  activity = "task";
+  activity = 'task';
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -23,24 +23,24 @@ export class ActivityModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskContent = {
-      title: "",
-      description: "",
+      title: '',
+      description: '',
       startTime: new Date(),
-      calendarId: ""
-    }
+      calendarId: ''
+    };
 
     console.log(this.userCalendars);
   }
 
   save() {
     switch (this.activity) {
-      case "task": {
+      case 'task': {
         console.log(this.taskContent);
         this.taskService.createTask(this.taskContent)
           .subscribe(task => {
-            console.log(typeof task.startTime)
+            console.log(typeof task.startTime);
             console.log(task);
-            this.activeModal.close('save')
+            this.activeModal.close('save');
           });
       }
     }

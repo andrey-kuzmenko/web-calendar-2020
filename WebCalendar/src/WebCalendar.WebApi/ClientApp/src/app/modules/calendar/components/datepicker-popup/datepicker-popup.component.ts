@@ -1,12 +1,12 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {NgbCalendar, NgbDate} from "@ng-bootstrap/ng-bootstrap";
+import {NgbCalendar, NgbDate} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-datepicker-popup',
   templateUrl: './datepicker-popup.component.html',
   styleUrls: ['./datepicker-popup.component.scss']
 })
-export class DatepickerPopupComponent implements OnInit{
+export class DatepickerPopupComponent implements OnInit {
 
   @Output() dateEmitter: EventEmitter<NgbDate>;
 

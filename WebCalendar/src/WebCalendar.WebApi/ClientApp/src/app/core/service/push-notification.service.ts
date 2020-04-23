@@ -1,26 +1,25 @@
-import {Injectable, NgZone, OnInit} from '@angular/core';
-import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {AuthenticationService} from "./authentication.service";
-import {map, mergeMapTo} from "rxjs/operators";
-import {AngularFireMessaging} from "@angular/fire/messaging";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Injectable, NgZone} from '@angular/core';
+import {environment} from '../../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {AuthenticationService} from './authentication.service';
+import {map, mergeMapTo} from 'rxjs/operators';
+import {AngularFireMessaging} from '@angular/fire/messaging';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PushNotificationService implements OnInit {
+export class PushNotificationService {
 
   public pushNotificationStatus = {
     isSubscribe: false,
     inProgress: false
-  }
+  };
   public pushNotificationStatusSubject = new BehaviorSubject<{
     isSubscribe: boolean,
     inProgress: boolean
   }>(this.pushNotificationStatus);
 
-  //public notifications = [];
 
   constructor(
     private http: HttpClient,
@@ -30,31 +29,24 @@ export class PushNotificationService implements OnInit {
 
     this.checkSubscribe();
 
-    //replace by in-app notify
+    // replace by in-app notify
     afMessaging.onMessage(payload => {
       console.log(payload);
-      const title = payload.notification.title
+      const title = payload.notification.title;
       const options = {
         body: payload.notification.body,
         icon: payload.notification.icon
       };
-      new Notification(title, options);
+      const notification = new Notification(title, options);
     });
   }
 
   checkSubscribe() {
-    this.pushNotificationStatus.isSubscribe = localStorage.getItem("pushNotificationToken") != null;
+    this.pushNotificationStatus.isSubscribe = localStorage.getItem('pushNotificationToken') != null;
     this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
   }
 
-  ngOnInit(): void {
-
-  }
-
   init() {
-    /*if(this.isSubscribeInit()){
-      return;
-    }*/
     this.pushNotificationStatus.inProgress = true;
     this.pushNotificationStatusSubject.next(this.pushNotificationStatus);
 
@@ -64,7 +56,7 @@ export class PushNotificationService implements OnInit {
         (token) => {
           console.log('Permission granted! Save to the server!', token);
 
-          localStorage.setItem("pushNotificationInit", JSON.stringify(true));
+          localStorage.setItem('pushNotificationInit', JSON.stringify(true));
           this.pushSubscribe().subscribe();
         },
         (error) => {
@@ -74,7 +66,7 @@ export class PushNotificationService implements OnInit {
   }
 
   isSubscribeInit(): boolean {
-    return localStorage.getItem("pushNotificationInit") != null;
+    return localStorage.getItem('pushNotificationInit') != null;
   }
 
   pushSubscribe(): Observable<any> {
@@ -82,7 +74,7 @@ export class PushNotificationService implements OnInit {
     const currentUser = this.authenticationService.currentUserValue;
 
     return this.afMessaging.getToken.pipe(map(token => {
-      localStorage.setItem("pushNotificationToken", JSON.stringify(token));
+      localStorage.setItem('pushNotificationToken', JSON.stringify(token));
       this.zone.run(() => this.checkSubscribe());
 
       this.http.post(`${environment.apiUrl}/notification/push/subscribe/${currentUser.id}`,
@@ -104,7 +96,7 @@ export class PushNotificationService implements OnInit {
 
     return this.afMessaging.getToken.pipe(map(token => {
       this.afMessaging.deleteToken(token);
-      localStorage.removeItem("pushNotificationToken");
+      localStorage.removeItem('pushNotificationToken');
       this.checkSubscribe();
 
       this.http.post(`${environment.apiUrl}/notification/push/unsubscribe/${currentUser.id}`,

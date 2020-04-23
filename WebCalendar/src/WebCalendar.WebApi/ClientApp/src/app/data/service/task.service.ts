@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import {AuthenticationService} from "../../core/service/authentication.service";
-import {HttpClient} from "@angular/common/http";
-import {Task} from "../schema/task";
-import {Observable} from "rxjs";
-import {environment} from "../../../environments/environment";
-import {map} from "rxjs/operators";
+import {Injectable} from '@angular/core';
+import {AuthenticationService} from '../../core/service/authentication.service';
+import {HttpClient} from '@angular/common/http';
+import {Task} from '../schema/task';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class TaskService {
@@ -12,18 +12,19 @@ export class TaskService {
   constructor(
     private authenticationService: AuthenticationService,
     private http: HttpClient
-  ) { }
+  ) {
+  }
 
-  createTask(task: Task): Observable<Task>{
+  createTask(task: Task): Observable<Task> {
     const user = this.authenticationService.currentUserValue;
     return this.http.post<Task>(`${environment.apiUrl}/task/${user.id}`, task)
-      .pipe(map(task => {
-        task.startTime = new Date(task.startTime);
-        return task;
+      .pipe(map(t => {
+        t.startTime = new Date(t.startTime);
+        return t;
       }));
   }
 
-  getAllTasks(calendarId: string): Observable<Array<Task>>{
+  getAllTasks(calendarId: string): Observable<Array<Task>> {
     const user = this.authenticationService.currentUserValue;
     return this.http.get<Array<Task>>(`${environment.apiUrl}/task/all/${calendarId}/${user.id}`)
       .pipe(map(tasks => {
@@ -34,16 +35,16 @@ export class TaskService {
       }));
   }
 
-  getTaskById(taskId: string): Observable<Task>{
+  getTaskById(taskId: string): Observable<Task> {
     const user = this.authenticationService.currentUserValue;
     return this.http.get<Task>(`${environment.apiUrl}/task/${taskId}/${user.id}`)
       .pipe(map(task => {
-          task.startTime = new Date(task.startTime + 'Z');
+        task.startTime = new Date(task.startTime + 'Z');
         return task;
       }));
   }
 
-  checkTask(taskId: string): Observable<any>{
+  checkTask(taskId: string): Observable<any> {
     return this.toggleTaskCompletion({
       id: taskId,
       isDone: true
@@ -55,6 +56,11 @@ export class TaskService {
       id: taskId,
       isDone: false
     });
+  }
+
+  deleteTask(taskId: string): Observable<any> {
+    const user = this.authenticationService.currentUserValue;
+    return this.http.delete(`${environment.apiUrl}/task/${taskId}/${user.id}`);
   }
 
   private toggleTaskCompletion(task: Task): Observable<any> {
