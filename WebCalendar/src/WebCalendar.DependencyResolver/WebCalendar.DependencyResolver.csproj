@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebCalendar.Common\WebCalendar.Common.csproj" />
+      <ProjectReference Include="..\WebCalendar.DAL.EF.Initializer\WebCalendar.DAL.EF.Initializer.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL.EF\WebCalendar.DAL.EF.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
       <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />

@@ -10,24 +10,24 @@ using Quartz.Spi;
 using WebCalendar.Common;
 using WebCalendar.Common.Contracts;
 using WebCalendar.DAL;
-using WebCalendar.DAL.EF;
 using WebCalendar.DAL.EF.Context;
+using WebCalendar.DAL.EF.Initializer;
 using WebCalendar.DAL.Models.Entities;
 using WebCalendar.DAL.Repositories.Contracts;
 using WebCalendar.DAL.Repositories.Implementation;
-using WebCalendar.Services.Contracts;
 using WebCalendar.EmailSender;
 using WebCalendar.EmailSender.Contracts;
-using WebCalendar.Services.Implementation;
 using WebCalendar.PushNotification;
 using WebCalendar.PushNotification.Contracts;
 using WebCalendar.PushNotification.Implementation;
+using WebCalendar.Services.Contracts;
+using WebCalendar.Services.Export.Contracts;
+using WebCalendar.Services.Export.Implementation;
+using WebCalendar.Services.Implementation;
 using WebCalendar.Services.Notification.Contracts;
 using WebCalendar.Services.Notification.Implementation;
 using WebCalendar.Services.Scheduler.Contracts;
 using WebCalendar.Services.Scheduler.Implementation;
-using WebCalendar.Services.Export.Implementation;
-using WebCalendar.Services.Export.Contracts;
 
 namespace WebCalendar.DependencyResolver
 {
@@ -53,7 +53,7 @@ namespace WebCalendar.DependencyResolver
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.AddScoped<IDataInitializer, EFDataInitializer>();
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EFRepositoryAsync<>));
@@ -67,27 +67,28 @@ namespace WebCalendar.DependencyResolver
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddSingleton<IMapper, WebCalendarAutoMapper>();
-            
+
             var firebaseNotification = configuration
                 .GetSection("FirebaseNotification")
                 .Get<FirebaseNotification>();
-            
+
             services.AddScoped<IPushNotificationSender, PushNotificationSender>(p =>
                 new PushNotificationSender(firebaseNotification));
-            
+
             var emailConfig = configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>();
-            
-            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e => 
+
+            services.AddScoped<IEmailSender, EmailSender.Implementation.EmailSender>(e =>
                 new EmailSender.Implementation.EmailSender(emailConfig));
-            
+
             services.AddScoped<INotificationService, NotificationService>();
 
             services.AddSingleton<IQuartzHostedService, QuartzHostedService>();
             services.AddHostedService(sp => sp.GetRequiredService<IQuartzHostedService>());
-                        services.AddSingleton<IJobFactory, SingletonJobFactory>();
-            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>(s => new StdSchedulerFactory(new NameValueCollection()));
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>(s =>
+                new StdSchedulerFactory(new NameValueCollection()));
             services.AddScoped<ISchedulerDataLoader, SchedulerDataLoader>();
             services.AddScoped<ISchedulerService, SchedulerService>();
 
