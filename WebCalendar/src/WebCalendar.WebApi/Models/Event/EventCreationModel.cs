@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using WebCalendar.DAL.Models;
 using WebCalendar.Services.Models.User;
 
-namespace WebCalendar.Services.Models.Event
+namespace WebCalendar.WebApi.Models.Event
 {
-    public class EventCreationServiceModel : IRepeatableActivity
+	public class EventCreationModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
