@@ -27,11 +27,12 @@ namespace WebCalendar.WebApi.Controllers
         }
 
         [HttpPost("{userId}")]
-        public async Task<ActionResult<EventModel>> CreateEvent(Guid userId, [FromBody] EventCreationModel eventCreationModel)
+        public async Task<ActionResult<EventModel>> CreateEvent(Guid userId,
+            [FromBody] EventCreationModel eventCreationModel)
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
-            if (user.Id != userId)
+            if (user == null || user.Id != userId)
             {
                 return Unauthorized();
             }
@@ -54,7 +55,7 @@ namespace WebCalendar.WebApi.Controllers
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
-            if (user.Id != userId)
+            if (user == null || user.Id != userId)
             {
                 return Unauthorized();
             }

@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Node.js" Version="5.3.0" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\WebCalendar.DAL.Models\WebCalendar.DAL.Models.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
       <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />

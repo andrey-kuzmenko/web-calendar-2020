@@ -41,11 +41,11 @@ namespace WebCalendar.WebApi
                     });
             });
 
-            services.AddControllers(options => 
-              {
+            services.AddControllers(options =>
+            {
                 options.Filters.Add(typeof(ValidationFilter));
                 options.Filters.Add(typeof(ApiExceptionFilter));
-              }).AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
+            }).AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>());
 
             services.AddAuthentication(options =>
                 {
@@ -67,7 +67,7 @@ namespace WebCalendar.WebApi
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                     };
                 });
-            
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
 
@@ -137,6 +137,7 @@ namespace WebCalendar.WebApi
                 {
                     spa.UseAngularCliServer(npmScript: "start");
                 }
+
                 spa.Options.StartupTimeout = System.TimeSpan.FromSeconds(200);
             });
         }
