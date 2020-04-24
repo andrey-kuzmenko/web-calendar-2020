@@ -28,29 +28,6 @@ namespace WebCalendar.Services.Scheduler.Implementation
             Scheduler.JobFactory = _jobFactory;
 
             await Scheduler.Start(cancellationToken);
-            //using (var scope = _scopeFactory.CreateScope())
-            //{
-            //    var dataLoader = scope.ServiceProvider.GetRequiredService<ISchedulerDataLoader>();
-
-            //    IEnumerable<SchedulerEvent> @events = await dataLoader.GetSchedulerEvents();
-            //    IEnumerable<SchedulerReminder> reminders = await dataLoader.GetSchedulerReminders();
-            //    IEnumerable<SchedulerTask> tasks = await dataLoader.GetSchedulerTasks();
-
-            //    foreach (var @event in @events)
-            //    {
-            //        await Scheduler.ScheduleEvent(@event);
-            //    }
-
-            //    foreach (var reminder in reminders)
-            //    {
-            //        await Scheduler.ScheduleReminder(reminder);
-            //    }
-
-            //    foreach (var task in tasks)
-            //    {
-            //        await Scheduler.ScheduleTask(task);
-            //    }
-            //}
         }
 
         async Task IHostedService.StopAsync(CancellationToken cancellationToken)
