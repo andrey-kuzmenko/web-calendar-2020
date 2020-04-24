@@ -17,8 +17,8 @@ export class MainLayoutComponent implements OnInit {
   }
 
   logout() {
+    localStorage.clear();
     this.pushNotificationService.pushUnsubscribe()
       .subscribe(() => this.authenticationService.logout());
-
   }
 }
