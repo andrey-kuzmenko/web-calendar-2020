@@ -10,7 +10,7 @@ namespace WebCalendar.Services.Models.Reminder
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
-        public int? RepetitionsCount { get; set; }
+
         public ICollection<int> DaysOfWeek { get; set; }
         public ICollection<int> DaysOfMounth { get; set; }
         public ICollection<int> Monthes { get; set; }

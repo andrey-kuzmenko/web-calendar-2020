@@ -11,8 +11,6 @@ namespace WebCalendar.Services.Models.Event
         public string Description { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public TimeSpan? NotifyBeforeInterval { get; set; }
-        public int? RepetitionsCount { get; set; }
 
         public ICollection<int> DaysOfWeek { get; set; }
         public ICollection<int> DaysOfMounth { get; set; }
