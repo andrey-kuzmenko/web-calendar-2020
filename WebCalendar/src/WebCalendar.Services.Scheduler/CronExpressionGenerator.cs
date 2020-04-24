@@ -10,17 +10,29 @@ namespace WebCalendar.Services.Scheduler
         private const char SEPARATOR = ',';
         private const string UNDEFINED = "?";
 
+        public static readonly string TriggerInThePast = Guid.NewGuid().ToString(); 
+
         public static string GetCronExpression(this IRepeatableActivity schedule)
         {
             string seconds = GetSeconds(schedule);
             string minutes = GetMinutes(schedule);
             string hours = GetHours(schedule);
             string daysOfMonth = GetDaysOfMonth(schedule);
-            string months = GetMonths(schedule);
+            string monthes = GetMonths(schedule);
             string daysOfWeek = GetDaysOfWeek(schedule);
             string years = GetYears(schedule);
 
-            return $"{seconds} {minutes} {hours} {daysOfMonth} {months} {daysOfWeek} {years}";
+            if (monthes == "" || years == "")
+            {
+                if (schedule.StartTime <= DateTime.Now)
+                {
+                    return TriggerInThePast;
+                }
+
+                return $"{seconds} {minutes} {hours} {schedule.StartTime.Day} {schedule.StartTime.Month} {UNDEFINED} {schedule.StartTime.Year}";
+            }
+
+            return $"{seconds} {minutes} {hours} {daysOfMonth} {monthes} {daysOfWeek} {years}";
         }
 
         private static string Separate(IEnumerable<int> items)

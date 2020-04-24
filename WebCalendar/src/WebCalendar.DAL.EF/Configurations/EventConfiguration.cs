@@ -10,6 +10,8 @@ namespace WebCalendar.DAL.EF.Configurations
         {
             ConvertFieds(builder);
 
+            builder.HasKey(e => e.Id);
+
             builder.HasMany(e => e.UserEvents)
                 .WithOne(ue => ue.Event)
                 .HasForeignKey(ue => ue.EventId);

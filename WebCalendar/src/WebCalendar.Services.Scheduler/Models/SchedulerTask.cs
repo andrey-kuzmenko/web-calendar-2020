@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebCalendar.DAL.Models.Entities;
 using WebCalendar.Services.Scheduler.Contracts;
 
 namespace WebCalendar.Services.Scheduler.Models

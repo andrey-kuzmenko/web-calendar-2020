@@ -1,9 +1,7 @@
-using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +13,7 @@ using WebCalendar.Common.Contracts;
 using WebCalendar.DependencyResolver;
 using WebCalendar.WebApi.Filters;
 using WebCalendar.WebApi.Middleware;
+using WebCalendar.Services.Scheduler.Contracts;
 
 namespace WebCalendar.WebApi
 {
@@ -80,7 +79,8 @@ namespace WebCalendar.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDataInitializer dataInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDataInitializer dataInitializer, 
+            ISchedulerDataLoader schedulerDataLoader)
         {
             if (env.IsDevelopment())
             {
@@ -106,6 +106,7 @@ namespace WebCalendar.WebApi
                 dataInitializer.Seed();
             }
 
+            schedulerDataLoader.Initialize();
             app.UseRouting();
 
             app.UseAuthentication();

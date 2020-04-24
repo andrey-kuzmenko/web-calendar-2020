@@ -1,8 +1,5 @@
 ﻿using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WebCalendar.Common;
 using WebCalendar.DAL.Models.Entities;
 

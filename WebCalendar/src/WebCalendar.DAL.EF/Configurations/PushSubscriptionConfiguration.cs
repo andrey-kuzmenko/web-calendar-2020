@@ -8,6 +8,8 @@ namespace WebCalendar.DAL.EF.Configurations
     {
         public void Configure(EntityTypeBuilder<PushSubscription> builder)
         {
+            builder.HasKey(e => e.Id);
+
             builder.HasOne(p => p.User)
                 .WithMany(u => u.PushSubscriptions)
                 .HasForeignKey(p => p.UserId);

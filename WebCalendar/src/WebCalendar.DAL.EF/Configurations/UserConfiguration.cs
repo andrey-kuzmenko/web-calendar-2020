@@ -8,6 +8,8 @@ namespace WebCalendar.DAL.EF.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
+            builder.HasKey(e => e.Id);
+
             builder.HasMany(u => u.CalendarUsers)
                 .WithOne(cu => cu.User)
                 .HasForeignKey(cu => cu.UserId)

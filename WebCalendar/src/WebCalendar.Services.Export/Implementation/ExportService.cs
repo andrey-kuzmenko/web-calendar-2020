@@ -40,11 +40,6 @@ namespace WebCalendar.Services.Export.Implementation
             return bytesCalendar;
         }
 
-        /// <summary>
-        /// Useless
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public async Task<byte[]> ExportEvent(Guid id)
         {
             Event @event = await _uow.GetRepository<Event>().GetByIdAsync(id);
