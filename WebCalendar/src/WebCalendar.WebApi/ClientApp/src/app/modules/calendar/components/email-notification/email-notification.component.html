@@ -1,0 +1,5 @@
+<button (click)="toggleSubscription()" class="btn btn-primary"
+        [disabled]="(emailNotificationService.emailNotificationStatusSubject | async).inProgress">
+  <span *ngIf="(emailNotificationService.emailNotificationStatusSubject | async).isSubscribe">Unsubscribe</span>
+  <span *ngIf="!(emailNotificationService.emailNotificationStatusSubject | async).isSubscribe">Subscribe</span>
+</button>

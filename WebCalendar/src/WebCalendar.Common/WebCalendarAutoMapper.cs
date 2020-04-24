@@ -2,7 +2,7 @@
 
 namespace WebCalendar.Common
 {
-    public class WebCalendarAutoMapper : WebCalendar.Common.Contracts.IMapper
+    public class WebCalendarAutoMapper : Contracts.IMapper
     {
         private readonly IMapper _mapper;
 

@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace WebCalendar.WEB
+namespace WebCalendar.Web
 {
     public class Program
     {
