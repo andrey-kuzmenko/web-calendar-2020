@@ -7,7 +7,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 })
 export class TimepickerComponent implements OnInit {
 
-  @Output() timeEmitter: EventEmitter<{hour: number, minute: number}>;
+  @Output() timeEmitter: EventEmitter<{ hour: number, minute: number }>;
 
   time: {
     hour: number,
@@ -16,7 +16,7 @@ export class TimepickerComponent implements OnInit {
   spinners = false;
 
   constructor() {
-    this.timeEmitter = new EventEmitter<{hour: number, minute: number}>();
+    this.timeEmitter = new EventEmitter<{ hour: number, minute: number }>();
   }
 
   ngOnInit(): void {

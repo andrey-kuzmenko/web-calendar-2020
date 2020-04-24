@@ -52,7 +52,7 @@ namespace WebCalendar.WebApi.Controllers
         {
             UserServiceModel user = await _userService.GetByPrincipalAsync(User);
 
-            if (user.Id != userId)
+            if (user == null || user.Id != userId)
             {
                 return Unauthorized();
             }

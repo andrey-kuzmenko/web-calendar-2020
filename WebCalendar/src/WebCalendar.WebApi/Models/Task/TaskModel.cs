@@ -1,5 +1,6 @@
 ﻿using System;
 using WebCalendar.Services.Models.Calendar;
+using WebCalendar.WebApi.Models.Calendar;
 
 namespace WebCalendar.WebApi.Models.Task
 {
@@ -12,6 +13,6 @@ namespace WebCalendar.WebApi.Models.Task
         public bool IsDone { get; set; }
 
         public Guid CalendarId { get; set; }
-        public CalendarServiceModel Calendar { get; set; }
+        public CalendarInfoModel Calendar { get; set; }
     }
 }

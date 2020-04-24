@@ -10,6 +10,7 @@ namespace WebCalendar.WebApi.Mapper
         {
             CreateMap<TaskCreationModel, TaskCreationServiceModel>();
             CreateMap<TaskServiceModel, TaskModel>();
+            CreateMap<TaskServiceModel, TaskEditionServiceModel>();
         }
     }
 }

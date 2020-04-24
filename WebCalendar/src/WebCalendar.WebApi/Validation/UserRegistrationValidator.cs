@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +12,7 @@ namespace WebCalendar.WebApi.Validation
         private const string INVALID_NAME_MESSAGE = "{PropertyName} must contain only letters and '-'";
         private const int MIN_NAME_LENGTH = 2;
         private const int MAX_NAME_LENGTH = 20;
+
 
         public UserRegistrationValidator()
         {

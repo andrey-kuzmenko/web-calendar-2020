@@ -88,7 +88,15 @@ namespace WebCalendar.Services.Implementation
 
         public async Task<IdentityResult> RegisterAsync(UserRegisterServiceModel userRegisterServiceModel)
         {
+            
+            
             User user = _mapper.Map<UserRegisterServiceModel, User>(userRegisterServiceModel);
+
+            bool exists = await _uow.GetRepository<User>().ExistsAsync(u => u.Email == user.Email);
+            if (exists)
+            {
+                return IdentityResult.Failed(new IdentityError {Code = "DuplicateEmail"});
+            }
 
             IdentityResult result = await _userManager.CreateAsync(user, userRegisterServiceModel.Password);
 

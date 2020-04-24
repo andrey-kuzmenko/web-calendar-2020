@@ -1,19 +1,19 @@
 import {Injectable, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {AuthenticationService} from "./authentication.service";
-import {environment} from "../../../environments/environment";
-import {BehaviorSubject, Observable} from "rxjs";
-import {finalize, map} from "rxjs/operators";
+import {HttpClient} from '@angular/common/http';
+import {AuthenticationService} from './authentication.service';
+import {environment} from '../../../environments/environment';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {finalize, map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EmailNotificationService implements OnInit {
+export class EmailNotificationService {
 
   public emailNotificationStatus = {
     isSubscribe: false,
     inProgress: false
-  }
+  };
   public emailNotificationStatusSubject = new BehaviorSubject<{
     isSubscribe: boolean,
     inProgress: boolean
@@ -27,10 +27,6 @@ export class EmailNotificationService implements OnInit {
         this.emailNotificationStatus.isSubscribe = isSubscribe;
         this.emailNotificationStatusSubject.next(this.emailNotificationStatus);
       });
-  }
-
-  ngOnInit(): void {
-
   }
 
   unsubscribe(): Observable<any> {

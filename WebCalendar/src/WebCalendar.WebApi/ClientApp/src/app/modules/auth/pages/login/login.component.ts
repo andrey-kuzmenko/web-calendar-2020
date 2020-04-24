@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
-import {AuthenticationService} from "../../../../core/service/authentication.service";
-import {User} from "../../../../data/schema/user";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {first} from 'rxjs/operators';
+import {AuthenticationService} from '../../../../core/service/authentication.service';
+import {User} from '../../../../data/schema/user';
 
 @Component({
   selector: 'app-login',
@@ -17,22 +17,22 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
 
   constructor(
-    private _formBuilder: FormBuilder,
-    private _router: Router,
-    private _route: ActivatedRoute,
-    private _authenticationService: AuthenticationService) {
-    if (this._authenticationService.currentUserValue) {
-      this._router.navigate(['/calendar']);
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private authenticationService: AuthenticationService) {
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/calendar']);
     }
   }
 
   ngOnInit() {
-    this.loginForm = this._formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern(".*[a-zA-Z].*")]]
+      password: ['', [Validators.required, Validators.minLength(6), Validators.pattern('.*[a-zA-Z].*')]]
     });
 
-    this.returnUrl = this._route.snapshot.queryParams['returnUrl'] || '/calendar';
+    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/calendar';
   }
 
   get f() {
@@ -50,13 +50,13 @@ export class LoginComponent implements OnInit {
     const user: User = {
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
-    }
+    };
 
-    this._authenticationService.login(user.email, user.password)
+    this.authenticationService.login(user.email, user.password)
       .pipe(first())
       .subscribe(
         data => {
-          this._router.navigate([this.returnUrl]);
+          this.router.navigate([this.returnUrl]);
         },
         error => {
         });

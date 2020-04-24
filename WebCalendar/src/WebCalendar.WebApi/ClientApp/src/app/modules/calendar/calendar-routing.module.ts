@@ -1,26 +1,18 @@
-﻿import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
-import {MainComponent} from "./pages/main/main.component";
-import {SettingsComponent} from "./pages/settings/settings.component";
+﻿import {RouterModule, Routes} from '@angular/router';
+import {NgModule} from '@angular/core';
+import {MainComponent} from './pages/main/main.component';
+import {SettingsComponent} from './pages/settings/settings.component';
 
 const routes: Routes = [
-  /*{
+  {
     path: '',
-    component: MainComponent
-  },
-  {
-    path: "settings",
-    component: SettingsComponent,
-  }*/
-  {
-    path: "",
     children: [
       {
-        path: "",
+        path: '',
         component: MainComponent
       },
       {
-        path: "settings",
+        path: 'settings',
         component: SettingsComponent
       }
     ]
@@ -31,4 +23,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CalendarRoutingModule { }
+export class CalendarRoutingModule {
+}

@@ -146,6 +146,16 @@ namespace WebCalendar.DAL.Repositories.Implementation
             return await _context.Set<T>().FindAsync(id);
         }
 
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> selector = null)
+        {
+            if (selector == null)
+            {
+                return await _dbSet.AnyAsync();
+            }
+
+            return await _dbSet.AnyAsync(selector);
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
