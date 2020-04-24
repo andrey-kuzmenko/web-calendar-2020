@@ -8,6 +8,8 @@ import {EventInput} from '@fullcalendar/core/structs/event';
 import {Calendar} from '../../../../data/schema/calendar';
 import {TaskService} from '../../../../data/service/task.service';
 import {OutsidePlacement, RelativePosition, Toppy, ToppyControl} from 'toppy';
+import {forkJoin, Observable} from "rxjs";
+import {Task} from "../../../../data/schema/task";
 
 @Component({
   selector: 'app-calendar',
@@ -22,7 +24,7 @@ export class CalendarComponent implements OnInit {
 
   currentEventsPopover: ToppyControl;
   currentTaskId: string;
-  @ViewChild('tpl') tpl: TemplateRef<any>;
+  @ViewChild('taskPopover') taskPopoverRef: TemplateRef<any>;
 
   calendarPlugins = [timeGridPlugin, dayGridPlugin, interactionPlugin];
 
@@ -66,7 +68,37 @@ export class CalendarComponent implements OnInit {
   // bad way
   public updateEvents(calendars: Array<Calendar>) {
     this.calendars = calendars;
-    this.taskService.getAllTasks(this.calendars[0].id).subscribe(tasks => {
+    this.calendarEvents = [];
+    const newEventsObservable: Array<Observable<Array<Task>>> = [];
+    this.calendars.forEach(calendar => {
+      newEventsObservable.push(this.taskService.getAllTasks(calendar.id));
+    });
+
+    forkJoin(newEventsObservable).subscribe( value => {
+      let tasks: Array<Task> = [];
+      value.forEach(v => {
+        tasks = tasks.concat(v);
+      });
+
+      this.calendarEvents = tasks.map(v => {
+        const event: EventInput = {
+          id: v.id,
+          title: v.title,
+          date: v.startTime,
+          textColor: 'white',
+          borderColor: '#00a9ff',
+          backgroundColor: '#00a9ff',
+          isDone: v.isDone
+        };
+        return event;
+      });
+
+      if (this.currentEventsPopover) {
+        this.currentEventsPopover.close();
+      }
+    });
+
+    /*this.taskService.getAllTasks(this.calendars[0].id).subscribe(tasks => {
       this.calendarEvents = tasks.map(value => {
         const event: EventInput = {
           id: value.id,
@@ -79,7 +111,7 @@ export class CalendarComponent implements OnInit {
         };
         return event;
       });
-    });
+    });*/
   }
 
   onEventClick($event: any) {
@@ -100,7 +132,7 @@ export class CalendarComponent implements OnInit {
         containerClass: 'event-popup-container',
         wrapperClass: 'event-popup-wrapper'
       })
-      .content(this.tpl)
+      .content(this.taskPopoverRef)
       .create();
 
     this.currentEventsPopover = overlay;
