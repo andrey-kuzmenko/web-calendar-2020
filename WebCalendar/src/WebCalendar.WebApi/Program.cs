@@ -30,6 +30,7 @@ namespace WebCalendar.WebApi
 
 
             return Host.CreateDefaultBuilder(args)
+                
                 .UseSerilog()
                 .ConfigureAppConfiguration(builder =>
                 {

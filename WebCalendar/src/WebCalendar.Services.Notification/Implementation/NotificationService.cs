@@ -61,11 +61,14 @@ namespace WebCalendar.Services.Notification.Implementation
             List<User> usersForNotify = calendar.CalendarUsers.Select(cu => cu.User).ToList();
             usersForNotify.Add(calendar.User);
 
-            IEnumerable<string> emails = usersForNotify.Select(u => u.Email);
+            IEnumerable<string> emails = usersForNotify.Select(u => u.Email)
+                .ToList();
 
             IEnumerable<string> deviceTokens = usersForNotify
+                .Where(u => u.PushSubscriptions != null)
                 .SelectMany(u => u.PushSubscriptions)
-                .Select(p => p.DeviceToken);
+                .Select(p => p.DeviceToken)
+                .ToList();
 
             switch (type)
             {
@@ -82,7 +85,7 @@ namespace WebCalendar.Services.Notification.Implementation
                         .Map<PushNotificationServiceModel, 
                             PushNotification.Models.Notification>(pushNotificationServiceModel);
 
-                    await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
+                        await _pushNotificationSender.SendPushNotificationAsync(deviceTokens, pushNotification);
                     var emailMessage = new Message(emails, task.Title,
                         "Time to start doing task\n" +
                         "Description: " + task.Description +

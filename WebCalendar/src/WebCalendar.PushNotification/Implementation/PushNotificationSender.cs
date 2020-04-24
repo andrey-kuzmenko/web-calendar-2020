@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using CorePush.Google;
 using WebCalendar.PushNotification.Contracts;
@@ -7,7 +8,7 @@ using Task = System.Threading.Tasks.Task;
 
 namespace WebCalendar.PushNotification.Implementation
 {
-    public class PushNotificationSender: IPushNotificationSender
+    public class PushNotificationSender : IPushNotificationSender
     {
         private readonly FirebaseNotification _firebaseNotification;
 
@@ -15,7 +16,7 @@ namespace WebCalendar.PushNotification.Implementation
         {
             _firebaseNotification = firebaseNotification;
         }
-        
+
         public async Task SendPushNotificationAsync(IEnumerable<string> deviceTokens,
             Notification notification)
         {
@@ -31,9 +32,7 @@ namespace WebCalendar.PushNotification.Implementation
                         click_action = notification.Url
                     },
                 });
-                
-                Debugger.Log(0, null,fcmResponse.IsSuccess().ToString());
-            } 
+            }
         }
     }
 }

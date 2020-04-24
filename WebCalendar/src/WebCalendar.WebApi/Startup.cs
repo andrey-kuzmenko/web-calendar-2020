@@ -139,7 +139,6 @@ namespace WebCalendar.WebApi
                     spa.UseAngularCliServer(npmScript: "start");
                 }
 
-              //  spa.Options.StartupTimeout = System.TimeSpan.FromSeconds(200);
             });
         }
     }
