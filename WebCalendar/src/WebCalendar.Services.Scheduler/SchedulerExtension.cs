@@ -17,10 +17,10 @@ namespace WebCalendar.Services.Scheduler
             if (@event.CronExpression != CronExpressionGenerator.TriggerInThePast)
             {
                 IJobDetail job = JobBuilder.Create<NotificationJob>()
-                .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
-                .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
-                .Build();
+                    .WithIdentity(jobKey)
+                    .UsingJobData(NotificationJob.JobDataKey, @event.Id.ToString())
+                    .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.EVENT)
+                    .Build();
 
                 ITrigger trigger = TriggerBuilder.Create()
                     .WithIdentity(triggerKey)
@@ -55,7 +55,7 @@ namespace WebCalendar.Services.Scheduler
             {
                 IJobDetail job = JobBuilder.Create<NotificationJob>()
                     .WithIdentity(jobKey)
-                    .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(reminder))
+                    .UsingJobData(NotificationJob.JobDataKey, reminder.Id.ToString())
                     .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.REMINDER)
                     .Build();
 
@@ -89,7 +89,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(task))
+                .UsingJobData(NotificationJob.JobDataKey, task.Id.ToString())
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.TASK)
                 .Build();
 
