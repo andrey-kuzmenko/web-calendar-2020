@@ -10,6 +10,8 @@ namespace WebCalendar.DAL.EF.Configurations
         {
             ConvertFieds(builder);
 
+            builder.HasKey(e => e.Id);
+
             builder.HasOne(r => r.Calendar)
                 .WithMany(c => c.Reminders)
                 .HasForeignKey(r => r.CalendarId);

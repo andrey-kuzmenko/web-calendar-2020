@@ -18,7 +18,7 @@ namespace WebCalendar.DAL.EF.Configurations
                 v => v.Split(";", StringSplitOptions.RemoveEmptyEntries)
                     .Select(val => int.Parse(val)).ToHashSet());
 
-        protected readonly ValueComparer _valueComparer = new IntegerSetComparer();
+        protected readonly ValueComparer _valueComparer = new IntegerCollectionComparer();
         protected void ConvertFieds(EntityTypeBuilder<T> builder)
         {
             builder.Property(e => e.Years)

@@ -8,8 +8,6 @@ namespace WebCalendar.Services.Scheduler.Contracts
 {
     public interface ISchedulerDataLoader
     {
-        Task<IEnumerable<SchedulerEvent>> GetSchedulerEvents();
-        Task<IEnumerable<SchedulerTask>> GetSchedulerTasks();
-        Task<IEnumerable<SchedulerReminder>> GetSchedulerReminders();
+        void Initialize();
     }
 }
