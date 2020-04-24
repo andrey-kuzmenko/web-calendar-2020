@@ -54,7 +54,7 @@ namespace WebCalendar.WebApi.Filters
                 switch (tryParseResult)
                 {
                     case ExceptionTypes.SchedulerException:
-                        return HttpStatusCode.OK;
+                        return HttpStatusCode.BadRequest;
 
                     case ExceptionTypes.NullReferenceException:
                         return HttpStatusCode.LengthRequired;

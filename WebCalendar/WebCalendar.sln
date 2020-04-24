@@ -21,16 +21,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.DependencyResol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.Services", "src\WebCalendar.Services\WebCalendar.Services.csproj", "{02544C5E-6730-4BFD-99DD-25FF66B55DFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.WebApi", "src\WebCalendar.WebApi\WebCalendar.WebApi.csproj", "{974FC91E-E540-439D-A899-B992BFBB5B46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.WebApi", "src\WebCalendar.WebApi\WebCalendar.WebApi.csproj", "{974FC91E-E540-439D-A899-B992BFBB5B46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.PushNotification", "src\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj", "{BF362075-29C4-49BA-AD2C-5BA664A9DB72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.PushNotification", "src\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj", "{BF362075-29C4-49BA-AD2C-5BA664A9DB72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.EmailSender", "src\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj", "{2BD7F197-33F5-42AF-8196-FD520985D240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.EmailSender", "src\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj", "{2BD7F197-33F5-42AF-8196-FD520985D240}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.Services.Scheduler", "src\WebCalendar.Services.Scheduler\WebCalendar.Services.Scheduler.csproj", "{94FE3E49-8715-4DEC-A053-B75644A96FAF}"
-
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.Services.Notification", "src\WebCalendar.Services.Notification\WebCalendar.Services.Notification.csproj", "{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalendar.Services.Notification", "src\WebCalendar.Services.Notification\WebCalendar.Services.Notification.csproj", "{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.Services.Export", "src\WebCalendar.Services.Export\WebCalendar.Services.Export.csproj", "{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalendar.DAL.EF.Initializer", "src\WebCalendar.DAL.EF.Initializer\WebCalendar.DAL.EF.Initializer.csproj", "{FFE23117-7402-4148-9DEE-3388E96D5588}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +89,14 @@ Global
 		{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFE23117-7402-4148-9DEE-3388E96D5588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE23117-7402-4148-9DEE-3388E96D5588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE23117-7402-4148-9DEE-3388E96D5588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE23117-7402-4148-9DEE-3388E96D5588}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +114,8 @@ Global
 		{2BD7F197-33F5-42AF-8196-FD520985D240} = {61D9B667-7A10-4E2C-9E3E-4613D47E9AE8}
 		{94FE3E49-8715-4DEC-A053-B75644A96FAF} = {61D9B667-7A10-4E2C-9E3E-4613D47E9AE8}
 		{AD21DBEE-9E7C-4531-AAFD-7D9973D41A74} = {61D9B667-7A10-4E2C-9E3E-4613D47E9AE8}
+		{4343CBBB-E2EB-4A90-8360-CA0A9BD4D069} = {61D9B667-7A10-4E2C-9E3E-4613D47E9AE8}
+		{FFE23117-7402-4148-9DEE-3388E96D5588} = {61D9B667-7A10-4E2C-9E3E-4613D47E9AE8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {41FF8186-2245-46A0-9598-86DF678F0393}

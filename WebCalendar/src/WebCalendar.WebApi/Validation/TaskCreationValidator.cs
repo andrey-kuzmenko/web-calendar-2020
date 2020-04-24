@@ -13,7 +13,7 @@ namespace WebCalendar.WebApi.Validation
         private const int MAX_TITLE_LENGTH = 20;
         private const int MAX_DESCRIPTION_LENGHT = 200;
 
-        TaskCreationValidator()
+        public TaskCreationValidator()
         {
             RuleFor(t => t.Title)
                 .NotEmpty()

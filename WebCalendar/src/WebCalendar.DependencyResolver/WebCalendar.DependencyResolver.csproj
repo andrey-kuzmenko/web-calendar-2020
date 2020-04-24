@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -12,10 +12,12 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WebCalendar.Common\WebCalendar.Common.csproj" />
+      <ProjectReference Include="..\WebCalendar.DAL.EF.Initializer\WebCalendar.DAL.EF.Initializer.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL.EF\WebCalendar.DAL.EF.csproj" />
       <ProjectReference Include="..\WebCalendar.DAL\WebCalendar.DAL.csproj" />
       <ProjectReference Include="..\WebCalendar.EmailSender\WebCalendar.EmailSender.csproj" />
       <ProjectReference Include="..\WebCalendar.PushNotification\WebCalendar.PushNotification.csproj" />
+      <ProjectReference Include="..\WebCalendar.Services.Export\WebCalendar.Services.Export.csproj" />
       <ProjectReference Include="..\WebCalendar.Services.Notification\WebCalendar.Services.Notification.csproj" />
       <ProjectReference Include="..\WebCalendar.Services.Scheduler\WebCalendar.Services.Scheduler.csproj" />
       <ProjectReference Include="..\WebCalendar.Services\WebCalendar.Services.csproj" />

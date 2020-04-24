@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Quartz;
 using Quartz.Spi;
-using Task = System.Threading.Tasks.Task;
 using WebCalendar.Services.Scheduler.Contracts;
+using Task = System.Threading.Tasks.Task;
 
 namespace WebCalendar.Services.Scheduler.Implementation
 {
@@ -12,16 +12,13 @@ namespace WebCalendar.Services.Scheduler.Implementation
     {
         private readonly ISchedulerFactory _schedulerFactory;
         private readonly IJobFactory _jobFactory;
-        private readonly IServiceScopeFactory _scopeFactory;
 
         public QuartzHostedService(
             ISchedulerFactory schedulerFactory,
-            IJobFactory jobFactory,
-            IServiceScopeFactory scopeFactory)
+            IJobFactory jobFactory)
         {
             _schedulerFactory = schedulerFactory;
             _jobFactory = jobFactory;
-            _scopeFactory = scopeFactory;
         }
 
         public IScheduler Scheduler { get; set; }

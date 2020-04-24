@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,8 @@ namespace WebCalendar.WebApi.Validation
         private const int MIN_NAME_LENGTH = 2;
         private const int MAX_NAME_LENGTH = 20;
 
-        UserRegistrationValidator()
+
+        public UserRegistrationValidator()
         {
             RuleFor(u => u.FirstName)
                 .NotEmpty()
@@ -27,7 +28,7 @@ namespace WebCalendar.WebApi.Validation
                 .MinimumLength(MIN_NAME_LENGTH)
                 .MaximumLength(MAX_NAME_LENGTH)
                 .Must(IsAValidName).WithMessage(INVALID_NAME_MESSAGE)
-                .WithName("Second name");
+                .WithName("Last name");
 
             RuleFor(u => u.Email)
                 .NotEmpty()

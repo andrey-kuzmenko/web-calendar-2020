@@ -13,7 +13,7 @@ namespace WebCalendar.DAL.EF.Configurations
     public abstract class RepeatableActivityConfiguration<T> : IEntityTypeConfiguration<T> where T : class, IRepeatableActivity
     {
         protected readonly ValueConverter _valueConverter =
-            new ValueConverter<ISet<int>, string>(
+            new ValueConverter<ICollection<int>, string>(
                 v => string.Join(";", v),
                 v => v.Split(";", StringSplitOptions.RemoveEmptyEntries)
                     .Select(val => int.Parse(val)).ToHashSet());

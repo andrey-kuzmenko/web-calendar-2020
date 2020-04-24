@@ -27,7 +27,9 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
+                .StartAt(@event.StartTime)
                 .WithCronSchedule(@event.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
+                .EndAt(@event.EndTime)
                 .Build();
 
             await scheduler.ScheduleJob(job, trigger);
@@ -60,6 +62,7 @@ namespace WebCalendar.Services.Scheduler
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
+                .StartAt(reminder.StartTime)
                 .WithCronSchedule(reminder.CronExpression, ce => ce.InTimeZone(TimeZoneInfo.Utc))
                 .Build();
 
@@ -86,7 +89,7 @@ namespace WebCalendar.Services.Scheduler
 
             IJobDetail job = JobBuilder.Create<NotificationJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData(NotificationJob.JobDataKey, task.Id.ToString())
+                .UsingJobData(NotificationJob.JobDataKey, JsonConvert.SerializeObject(task))
                 .UsingJobData(NotificationJob.JobActivityTypeKey, ConstantsStorage.TASK)
                 .Build();
 
